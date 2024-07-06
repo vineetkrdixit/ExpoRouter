@@ -44,6 +44,8 @@ const DrawerLayout = () => {
     );
   };
 
+  console.log("=-------------");
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
