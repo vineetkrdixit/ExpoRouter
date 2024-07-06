@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "940585881554",
+    "project_id": "appdistribution-983aa",
+    "storage_bucket": "appdistribution-983aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940585881554:android:06a0d1c7163d3866af820b",
+        "android_client_info": {
+          "package_name": "com.anonymous.routerSupabase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-9XaRtk--DjOyBqcRpPOvDe3azayq7VY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
