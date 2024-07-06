@@ -16,7 +16,7 @@ AxiosInstance.interceptors.request.use(
   (err) => {
     console.log(err, "err request from axios interceptor");
     return err;
-  }
+  },
 );
 
 AxiosInstance.interceptors.response.use(
@@ -27,6 +27,6 @@ AxiosInstance.interceptors.response.use(
   (err) => {
     console.log(err, "err response from axios interceptor");
     return err;
-  }
+  },
 );
 export default AxiosInstance;

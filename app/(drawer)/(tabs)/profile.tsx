@@ -3,7 +3,7 @@ import { useRoute } from "@react-navigation/native";
 import { Button, Input } from "@rneui/themed";
 import { Session } from "@supabase/supabase-js";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 

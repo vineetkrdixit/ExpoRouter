@@ -1,5 +1,5 @@
 import { getAllProductData } from "@/api/getRequests";
-import React, { Component } from "react";
+import React from "react";
 import { Button, Text, View } from "react-native";
 
 const OutSide1 = () => {
