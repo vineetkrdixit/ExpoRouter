@@ -54,13 +54,7 @@ export default function RootLayout() {
         router.replace("(auth)");
       }
     });
-    // if (token) {
-    //   console.log("in if statement");
-    //   router.replace("(drawer)");
-    // } else {
-    //   console.log("in else statement");
-    //   router.replace("(auth)");
-    // }
+
   }, [loaded]);
 
   useEffect(() => {
