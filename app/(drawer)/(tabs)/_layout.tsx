@@ -56,7 +56,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="reel"
         options={{
-          title: "Reelss",
+          title: "Reels3s",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "code" : "code-outline"}
