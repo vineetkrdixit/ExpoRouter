@@ -9,8 +9,8 @@ jobs:
         steps:
            - checkout
            - run:
-            name: configure build
-            command: bundle update fastlane && gem install bundler && bundle install
+                 name: configure build
+                 command: bundle update fastlane && gem install bundler && bundle install
            - run:
                  name: "Install Firebase CLI"
                  command: |
