@@ -23,9 +23,7 @@ jobs:
 workflows:
     build-and-test:
         jobs:
-            - alpha_stage:
-                  requires:
-            - build
+            - alpha_stage
         # - deploy:
         #     requires:
         #       - test-node
