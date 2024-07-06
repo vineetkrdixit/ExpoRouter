@@ -30,7 +30,6 @@ export default function RootLayout() {
 
   // console.log(supabase, "==-==--=-=-=-");
 
-  console.log(segment, "segment==");
   // useEffect(() => {
   //   if (token) {
   //     console.log("in if statement");
