@@ -71,8 +71,9 @@ alpha_stage:
      steps:
       - checkout
        - run:
+         name: configure build
               command: bundle update fastlane && gem install bundler && bundle install
-              name: configure build
+            
        - run:
                name: "Install Firebase CLI"
                command: |
