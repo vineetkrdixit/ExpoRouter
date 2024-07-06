@@ -21,8 +21,22 @@ export default function TabLayout() {
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
+
+
+
+
+
               name={focused ? "home" : "home-outline"}
               color={color}
+
+
+
+
+
+
+
+
+
             />
           ),
         }}
@@ -42,7 +56,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="reel"
         options={{
-          title: "Reel",
+          title: "Reelss",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "code" : "code-outline"}
