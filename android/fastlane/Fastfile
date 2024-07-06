@@ -15,24 +15,18 @@
 
 default_platform(:android)
 
-platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
-  end
+  platform :android do
+    desc "My awesome app"
+    lane :distribute do
+      build_android_app(
+        task: "assemble",
+        build_type: "release"
+      )
+        # build_android_app is a built-in fastlane action.
+        release = firebase_app_distribution(
+            app: "1:940585881554:android:06a0d1c7163d3866af820b",
+            testers: "vineetdixit.vns@gmail.com, tester2@yopmail.com",
+            release_notes: "Lots of amazing new features to test out!"
+        )
+    end
 end
