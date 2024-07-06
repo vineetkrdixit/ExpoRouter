@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 
 const AuthLayout = () => {
   console.log("-=-===");
+
   return (
     <Stack>
       <Stack.Screen name="index" />

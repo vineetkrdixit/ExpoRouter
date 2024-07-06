@@ -46,6 +46,10 @@
     "redux-persist": "^6.0.0"
   },
   "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
     "**/*": "prettier --write --ignore-unknown"
   },
   "devDependencies": {
