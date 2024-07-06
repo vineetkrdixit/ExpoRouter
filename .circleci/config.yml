@@ -70,17 +70,17 @@ alpha_stage:
  
      steps:
       - checkout
-       - run:
-         name: configure build
-              command: bundle update fastlane && gem install bundler && bundle install
+      - run:
+            name: configure build
+            command: bundle update fastlane && gem install bundler && bundle install
             
-       - run:
-               name: "Install Firebase CLI"
-               command: |
+      - run:
+            name: "Install Firebase CLI"
+            command: |
                   curl -sL firebase.tools | bash
-       - run:
-               name: "Deploy alpha build to Firebase"
-               command: |
+      - run:
+            name: "Deploy alpha build to Firebase"
+            command: |
                    bundle exec fastlane stage flavor:alpha branch:${CIRCLE_BRANCH} app_id:$FIREBASE_APP_ID_ALPHA firebase_token:$FIREBASE_TOKEN
 
   workflows:
