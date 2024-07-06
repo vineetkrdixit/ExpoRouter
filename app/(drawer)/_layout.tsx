@@ -17,6 +17,7 @@ const DrawerLayout = () => {
                     label={'home'}
                     onPress={() => router.push('/(drawer)/(tabs)')}
                 />
+
                 <DrawerItem
                     label={'profile'}
                     onPress={() =>
@@ -44,9 +45,7 @@ const DrawerLayout = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <Drawer
-                drawerContent={(props) => <CustomDrawerComponent {...props} />}
-            ></Drawer>
+            <Drawer drawerContent={() => <CustomDrawerComponent />}></Drawer>
         </GestureHandlerRootView>
     );
 };
