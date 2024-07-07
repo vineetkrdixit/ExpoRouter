@@ -85,7 +85,7 @@ jobs:
     node:
         working_directory: ~/demo-react-native
         docker:
-            - image: cimg/node:12.16
+            - image: cimg/node:20
 
         steps:
             - checkout
@@ -96,7 +96,7 @@ jobs:
             - restore_cache:
                   key: node-v1-{{ checksum "package.json" }}-{{ arch }}
 
-            - run: yarn install
+            - run: npm install
 
             - save_cache:
                   key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
