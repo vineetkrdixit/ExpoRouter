@@ -162,12 +162,9 @@ jobs:
                   path: test-results
 
 workflows:
-    node-android-ios:
+    build_and_deploy:
         jobs:
             - node
             - android-build-and-test:
-                  requires:
-                      - node
-            - macos-build-and-test:
                   requires:
                       - node
