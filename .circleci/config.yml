@@ -11,6 +11,19 @@ jobs:
         steps:
             - checkout
 
+            # Install nvm and Node.js
+            - run:
+                  name: Install nvm and Node.js
+                  command: |
+                      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+                      export NVM_DIR="$HOME/.nvm"
+                      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                      nvm install 20
+                      nvm use 20
+                      nvm alias default 20
+                      echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+                      echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+
             # Grant execute permissions to gradlew
             - run:
                   name: Grant execute permission to gradlew
