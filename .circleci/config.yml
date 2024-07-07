@@ -85,7 +85,7 @@ jobs:
     node:
         working_directory: ~/demo-react-native
         docker:
-            - image: cimg/node:20
+            - image: cimg/node:20.11
 
         steps:
             - checkout
