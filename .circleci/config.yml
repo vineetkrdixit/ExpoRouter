@@ -11,29 +11,45 @@ jobs:
         steps:
             - checkout
 
-            # Download and cache dependencies
+            # Download and cache dependencies for the project-level build.gradle
             - restore_cache:
                   keys:
-                      - v1-dependencies-{{ checksum "build.gradle" }}
+                      - v1-dependencies-{{ checksum "android/build.gradle" }}
                       - v1-dependencies-
 
             - run:
-                  name: Download dependencies
-                  command: ./gradlew androidDependencies
+                  name: Download project-level dependencies
+                  command: cd android && ./gradlew androidDependencies
+
+            # Cache dependencies for the app-level build.gradle
+            - save_cache:
+                  paths:
+                      - ~/.gradle
+                  key: v1-dependencies-{{ checksum "android/build.gradle" }}
+
+            # Download and cache dependencies for the app-level build.gradle
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "android/app/build.gradle" }}
+                      - v1-dependencies-
+
+            - run:
+                  name: Download app-level dependencies
+                  command: cd android && ./gradlew app:dependencies
 
             - save_cache:
                   paths:
                       - ~/.gradle
-                  key: v1-dependencies-{{ checksum "build.gradle" }}
+                  key: v1-dependencies-{{ checksum "android/app/build.gradle" }}
 
             # Run Fastlane
             - run:
                   name: Run Fastlane
-                  command: bundle exec fastlane distribute
+                  command: cd android && bundle exec fastlane distribute
 
             # Save artifacts
             - store_artifacts:
-                  path: app/build/outputs/apk/release/app-release.apk
+                  path: android/app/build/outputs/apk/release/app-release.apk
 
 workflows:
     version: 2
