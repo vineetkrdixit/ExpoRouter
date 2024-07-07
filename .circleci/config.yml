@@ -29,6 +29,11 @@ jobs:
                   name: Grant execute permission to gradlew
                   command: chmod +x android/gradlew
 
+            # Debug step to list files and ensure paths are correct
+            - run:
+                  name: List Android Directory
+                  command: ls -R android
+
             # Download and cache dependencies for the project-level build.gradle
             - restore_cache:
                   keys:
