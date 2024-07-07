@@ -48,7 +48,7 @@ jobs:
             - save_cache:
                   paths:
                       - ~/.gradle
-                  key: v1-dependencies-{{ checksum "android/build.gradle" }}
+                  key: v1-dependencies-{{ checksum "android/app/build.gradle" }}
 
             # Download and cache dependencies for the app-level build.gradle
             - restore_cache:
