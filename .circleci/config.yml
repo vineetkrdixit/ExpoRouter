@@ -11,6 +11,11 @@ jobs:
         steps:
             - checkout
 
+            # Grant execute permissions to gradlew
+            - run:
+                  name: Grant execute permission to gradlew
+                  command: chmod +x android/gradlew
+
             # Download and cache dependencies for the project-level build.gradle
             - restore_cache:
                   keys:
