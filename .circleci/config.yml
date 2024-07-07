@@ -1,30 +1,42 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:java:android,deps:node:.,test:jest:,tool:gradle:
 version: 2.1
-orbs:
-    node: circleci/node@5
+
+executors:
+    android:
+        docker:
+            - image: circleci/android:api-30
+
 jobs:
-    alpha_stage:
-        # Install node dependencies and run tests
+    build:
+        executor: android
         steps:
             - checkout
+
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "build.gradle" }}
+                      - v1-dependencies-
+
             - run:
-                  name: configure build
-                  command: bundle update fastlane && gem install bundler && bundle install
+                  name: Download dependencies
+                  command: ./gradlew androidDependencies
+
+            - save_cache:
+                  paths:
+                      - ~/.gradle
+                  key: v1-dependencies-{{ checksum "build.gradle" }}
+
+            # Run Fastlane
             - run:
-                  name: 'Install Firebase CLI'
-                  command: |
-                      curl -sL firebase.tools | bash
-            - run:
-                  name: 'Deploy alpha build to Firebase'
-                  command: |
-                      bundle exec fastlane stage flavor:alpha branch:${CIRCLE_BRANCH} app_id:$FIREBASE_APP_ID_ALPHA firebase_token:$FIREBASE_TOKEN
+                  name: Run Fastlane
+                  command: bundle exec fastlane distribute
+
+            # Save artifacts
+            - store_artifacts:
+                  path: app/build/outputs/apk/release/app-release.apk
 
 workflows:
-    build-and-test:
+    version: 2
+    build_and_deploy:
         jobs:
-            - alpha_stage
-        # - deploy:
-        #     requires:
-        #       - test-node
-        #       - test-java
+            - build
