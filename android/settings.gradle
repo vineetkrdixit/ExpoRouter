@@ -1,45 +1,18 @@
-// rootProject.name = 'routerSupabase'
-
-// dependencyResolutionManagement {
-//   versionCatalogs {
-//     reactAndroidLibs {
-//       from(files(new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), "../gradle/libs.versions.toml")))
-//     }
-//   }
-// }
-
-// apply from: new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle");
-// useExpoModules()
-
-// apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
-// applyNativeModulesSettingsGradle(settings)
-
-// include ':app'
-// includeBuild(new File(["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()).getParentFile())
 rootProject.name = 'routerSupabase'
 
 dependencyResolutionManagement {
   versionCatalogs {
     reactAndroidLibs {
-      def resolvedPath = ["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()
-      println("Resolved react-native path: $resolvedPath")
-      from(files(new File(resolvedPath, "../gradle/libs.versions.toml")))
+      from(files(new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), "../gradle/libs.versions.toml")))
     }
   }
 }
 
-def expoPath = ["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim()
-println("Resolved expo path: $expoPath")
-apply from: new File(expoPath, "../scripts/autolinking.gradle")
+apply from: new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle");
 useExpoModules()
 
-def cliPlatformAndroidPath = ["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()
-println("Resolved cli-platform-android path: $cliPlatformAndroidPath")
-apply from: new File(cliPlatformAndroidPath, "../native_modules.gradle")
+apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
 applyNativeModulesSettingsGradle(settings)
 
 include ':app'
-
-def gradlePluginPath = ["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()
-println("Resolved gradle-plugin path: $gradlePluginPath")
-includeBuild(new File(gradlePluginPath).getParentFile())
+includeBuild(new File(["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()).getParentFile())
