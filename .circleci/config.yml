@@ -168,9 +168,9 @@ jobs:
                   key: v1-dependencies-{{ checksum "package.json" }}
 
             # Set up the JDK
-            - run:
-                  name: Set up JDK
-                  command: choco install jdk8
+            # - run:
+            #       name: Set up JDK
+            #       command: choco install jdk8
 
             # Set up Gradle
             - restore_cache:
@@ -188,8 +188,7 @@ jobs:
             #     destination: apk
 
     deploy_firebase:
-        machine:
-            image: windows-server-2019
+        executor: windows
         environment:
             JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.10.7-hotspot"
         steps:
