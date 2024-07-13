@@ -4,79 +4,79 @@ orbs:
     node: circleci/node@5
 
 jobs:
-    build:
-        docker:
-            - image: reactnativecommunity/react-native-android:latest
-        environment:
-            GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-        working_directory: ~/repo
-        steps:
-            - checkout
+    #     build:
+    #         docker:
+    #             - image: reactnativecommunity/react-native-android:latest
+    #         environment:
+    #             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+    #         working_directory: ~/repo
+    #         steps:
+    #             - checkout
 
-            # Install Node.js and npm
-            - run:
-                  name: Install Node.js and npm
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install -y nodejs npm
+    #             # Install Node.js and npm
+    #             - run:
+    #                   name: Install Node.js and npm
+    #                   command: |
+    #                       sudo apt-get update
+    #                       sudo apt-get install -y nodejs npm
 
-            # Install Yarn
-            - run:
-                  name: Install Yarn
-                  command: sudo npm install -g yarn
+    #             # Install Yarn
+    #             - run:
+    #                   name: Install Yarn
+    #                   command: sudo npm install -g yarn
 
-            - run:
-                  name: Chmod permissions
-                  command: sudo chmod +x ./gradlew
-                  working_directory: android
+    #             - run:
+    #                   name: Chmod permissions
+    #                   command: sudo chmod +x ./gradlew
+    #                   working_directory: android
 
-            # Download and cache dependencies
-            - restore_cache:
-                  keys:
-                      - v1-dependencies-{{ checksum "package.json" }}
-                      - v1-dependencies-
+    #             # Download and cache dependencies
+    #             - restore_cache:
+    #                   keys:
+    #                       - v1-dependencies-{{ checksum "package.json" }}
+    #                       - v1-dependencies-
 
-            - run:
-                  name: Install dependencies
-                  command: yarn install
+    #             - run:
+    #                   name: Install dependencies
+    #                   command: yarn install
 
-            - save_cache:
-                  paths:
-                      - node_modules
-                  key: v1-dependencies-{{ checksum "package.json" }}
+    #             - save_cache:
+    #                   paths:
+    #                       - node_modules
+    #                   key: v1-dependencies-{{ checksum "package.json" }}
 
-            # Set up the JDK
-            - run:
-                  name: Set up JDK
-                  command: |
-                      sudo apt-get update
+    #             # Set up the JDK
+    #             - run:
+    #                   name: Set up JDK
+    #                   command: |
+    #                       sudo apt-get update
 
-            # Set up Gradle
-            - restore_cache:
-                  keys:
-                      - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-                      - v1-gradle-
+    #             # Set up Gradle
+    #             - restore_cache:
+    #                   keys:
+    #                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+    #                       - v1-gradle-
 
-            - run:
-                  name: Assemble Release
-                  command: |
-                      ./gradlew assembleRelease
-                  working_directory: android
-                  no_output_timeout: 30m
+    #             - run:
+    #                   name: Assemble Release
+    #                   command: |
+    #                       ./gradlew assembleRelease
+    #                   working_directory: android
+    #                   no_output_timeout: 30m
 
-            - save_cache:
-                  paths:
-                      - ~/.gradle
-                  key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+    #             - save_cache:
+    #                   paths:
+    #                       - ~/.gradle
+    #                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
 
-            # Store the APK as a CircleCI artifact
-            - store_artifacts:
-                  path: android/app/build/outputs/apk/release
-                  destination: apk
+    #             # Store the APK as a CircleCI artifact
+    #             - store_artifacts:
+    #                   path: android/app/build/outputs/apk/release
+    #                   destination: apk
 
     deploy_firebase:
         docker:
-            - image: circleci/ruby:2.6
+            - image: circleci/ruby:3.3.3
         working_directory: ~/repo/android
         steps:
             - checkout
@@ -95,7 +95,7 @@ workflows:
     version: 2
     build_and_deploy:
         jobs:
-            - build
+            # - build
             - deploy_firebase:
                   requires:
                       - build
