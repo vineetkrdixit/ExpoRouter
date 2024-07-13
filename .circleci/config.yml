@@ -191,8 +191,8 @@ jobs:
 
     deploy_firebase:
         executor: windows
-        environment:
-            JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.10.7-hotspot"
+        #   environment:
+        #       JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.10.7-hotspot"
         steps:
             - checkout
 
