@@ -216,11 +216,11 @@ jobs:
                   name: Install Bundler 2.5.14
                   command: gem install bundler -v 2.5.14
 
-            # Install Fastlane
-            - run:
-                  name: Install Fastlane
-                  command: powershell -Command "bundle _2.5.14_ install"
-                  working_directory: android
+            # # Install Fastlane
+            # - run:
+            #       name: Install Fastlane
+            #       command: powershell -Command "bundle _2.5.14_ install"
+            #       working_directory: android
 
             # Run Fastlane to deploy to Firebase
             - run:
