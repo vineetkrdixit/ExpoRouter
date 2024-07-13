@@ -1,8 +1,7 @@
 import { supabase } from '@/supabase';
 import { useRoute } from '@react-navigation/native';
-import { Button, Input } from '@rneui/themed';
 import React, { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Button, TextInput } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 
 const Profile = () => {
@@ -90,18 +89,16 @@ const Profile = () => {
         // <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={styles.container}>
             <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Input label="Email" value={session?.user?.email} disabled />
+                <TextInput value={session?.user?.email} disabled />
             </View>
             <View style={styles.verticallySpaced}>
-                <Input
-                    label="Username"
+                <TextInput
                     value={username || ''}
                     onChangeText={(text) => setUsername(text)}
                 />
             </View>
             <View style={styles.verticallySpaced}>
-                <Input
-                    label="Website"
+                <TextInput
                     value={website || ''}
                     onChangeText={(text) => setWebsite(text)}
                 />

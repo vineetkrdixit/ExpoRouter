@@ -23,7 +23,6 @@
     "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/native": "^6.0.2",
     "@reduxjs/toolkit": "^2.2.6",
-    "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.44.2",
     "axios": "^1.7.2",
     "expo": "~51.0.17",
