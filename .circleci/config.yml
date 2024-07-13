@@ -229,7 +229,7 @@ jobs:
             # Install Fastlane
             - run:
                   name: Install Fastlane
-                  command: powershell -Command "bundle _2.5.14_ install"
+                  command: powershell -Command "bundle install"
                   working_directory: android
 
             # Run Fastlane to deploy to Firebase
