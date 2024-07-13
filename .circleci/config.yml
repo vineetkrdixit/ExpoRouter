@@ -42,12 +42,12 @@ jobs:
                   key: v1-dependencies-{{ checksum "package.json" }}
 
             # Set up the JDK
-            - run:
-                  name: Set up JDK
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install -y openjdk-8-jdk
-                      sudo update-alternatives --config java
+            # - run:
+            #       name: Set up JDK
+            #       command: |
+            #           sudo apt-get update
+            #           sudo apt-get install -y openjdk-8-jdk
+            #           sudo update-alternatives --config java
 
             # Set up Gradle
             - restore_cache:
