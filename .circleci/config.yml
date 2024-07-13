@@ -77,19 +77,19 @@ jobs:
     deploy_firebase:
         docker:
             - image: cimg/ruby:2.7.4
-        working_directory: ~/repo/android/android
+        working_directory: ~/repo
         steps:
             - checkout
 
             # Debugging step to list the contents of the android directory
             - run:
                   name: List android directory contents
-                  command: ls -la ~/repo/android/android
+                  command: ls -la ~/repo/android/
 
             # Debugging step to list the contents of the fastlane directory
             - run:
                   name: List fastlane directory contents
-                  command: ls -la ~/repo/android/android/fastlane
+                  command: ls -la ~/repo/android/fastlane/
 
             # Install Fastlane
             - run:
