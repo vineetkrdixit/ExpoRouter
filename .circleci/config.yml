@@ -42,12 +42,12 @@ jobs:
                   key: v1-dependencies-{{ checksum "package.json" }}
 
             # Set up the JDK
-            # - run:
-            #       name: Set up JDK
-            #       command: |
-            #           sudo apt-get update
-            #           sudo apt-get install -y openjdk-8-jdk
-            #           sudo update-alternatives --config java
+            - run:
+                  name: Set up JDK
+                  command: |
+                      sudo apt-get update
+                  #     sudo apt-get install -y openjdk-8-jdk
+                  #     sudo update-alternatives --config java
 
             # Set up Gradle
             - restore_cache:
@@ -57,7 +57,10 @@ jobs:
 
             - run:
                   name: Assemble Release
-                  command: ./gradlew assembleRelease
+                  command: |
+                  ./gradlew --build-cache --max-workers 4 --no-daemon --continue assembleRelease --stacktrace
+                working_directory: android
+                no_output_timeout: 30m
 
             - save_cache:
                   paths:
