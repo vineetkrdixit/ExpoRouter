@@ -12,6 +12,11 @@ jobs:
         steps:
             - checkout
 
+            # Install Yarn
+            - run:
+                  name: Install Yarn
+                  command: sudo npm install -g yarn
+
             # Download and cache dependencies
             - restore_cache:
                   keys:
@@ -20,7 +25,7 @@ jobs:
 
             - run:
                   name: Install dependencies
-                  command: npm install
+                  command: yarn install
 
             - save_cache:
                   paths:
