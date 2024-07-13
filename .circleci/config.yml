@@ -24,6 +24,7 @@ jobs:
             - run:
                   name: Install Yarn
                   command: sudo npm install -g yarn
+
             - run:
                   name: Chmod permissions
                   command: sudo chmod +x ./gradlew
@@ -73,7 +74,7 @@ jobs:
                   path: android/app/build/outputs/apk/release
                   destination: apk
 
-      deploy_firebase:
+    deploy_firebase:
         docker:
             - image: circleci/ruby:2.6
         working_directory: ~/repo/android
@@ -92,6 +93,9 @@ jobs:
 
 workflows:
     version: 2
-    build:
+    build_and_deploy:
         jobs:
             - build
+            - deploy_firebase:
+                  requires:
+                      - build
