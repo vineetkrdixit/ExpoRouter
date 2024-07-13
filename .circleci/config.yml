@@ -1,168 +1,62 @@
-# version: 2.1
-
-# executors:
-#     android:
-#         docker:
-#             - image: circleci/android:api-30
-
-# jobs:
-#     build:
-#         executor: android
-#         steps:
-#             - checkout
-
-#             # Install nvm and Node.js
-#             - run:
-#                   name: Install nvm and Node.js
-#                   command: |
-#                       curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-#                       export NVM_DIR="$HOME/.nvm"
-#                       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-#                       nvm install 20
-#                       nvm use 20
-#                       nvm alias default 20
-#                       echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
-#                       echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-
-#             # Grant execute permissions to gradlew
-#             - run:
-#                   name: Grant execute permission to gradlew
-#                   command: chmod +x android/gradlew
-
-#             # Debug step to list files and ensure paths are correct
-#             - run:
-#                   name: List Android Directory
-#                   command: ls -R android
-
-#             # Download and cache dependencies for the project-level build.gradle
-#             - restore_cache:
-#                   keys:
-#                       - v1-dependencies-{{ checksum "android/build.gradle" }}
-#                       - v1-dependencies-
-
-#             - run:
-#                   name: Download project-level dependencies
-#                   command: cd android && ./gradlew androidDependencies
-
-#             # Cache dependencies for the app-level build.gradle
-#             - save_cache:
-#                   paths:
-#                       - ~/.gradle
-#                   key: v1-dependencies-{{ checksum "android/build.gradle" }}
-
-#             # Download and cache dependencies for the app-level build.gradle
-#             - restore_cache:
-#                   keys:
-#                       - v1-dependencies-{{ checksum "android/app/build.gradle" }}
-#                       - v1-dependencies-
-
-#             - run:
-#                   name: Download app-level dependencies
-#                   command: cd android && ./gradlew app:dependencies
-
-#             - save_cache:
-#                   paths:
-#                       - ~/.gradle
-#                   key: v1-dependencies-{{ checksum "android/app/build.gradle" }}
-
-#             # Run Fastlane
-#             - run:
-#                   name: Run Fastlane
-#                   command: cd android && bundle exec fastlane distribute
-
-#             # Save artifacts
-#             - store_artifacts:
-#                   path: android/app/build/outputs/apk/release/app-release.apk
-
-# workflows:
-#     version: 2
-#     build_and_deploy:
-#         jobs:
-#             - build
-
 version: 2.1
-jobs:
-    node:
-        working_directory: ~/demo-react-native
-        docker:
-            - image: cimg/node:20.11
 
+executors:
+    android:
+        docker:
+            - image: circleci/android:api-30
+        working_directory: ~/repo
+
+jobs:
+    build:
+        executor: android
         steps:
             - checkout
 
+            # Download and cache dependencies
             - restore_cache:
-                  key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
-
-            - restore_cache:
-                  key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-
-            - run: npm install
-
-            - save_cache:
-                  key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
-                  paths:
-                      - ~/.cache/npm
-
-            - save_cache:
-                  key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-                  paths:
-                      - node_modules
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      - v1-dependencies-
 
             - run:
-                  name: jest tests
-                  command: |
-                      mkdir -p test-results/jest
-                      npm run test
-                  environment:
-                      JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
-
-            - persist_to_workspace:
-                  root: ~/demo-react-native
-                  paths:
-                      - node_modules
-
-            - store_test_results:
-                  path: test-results
-
-            - store_artifacts:
-                  path: test-results
-
-    android-build-and-test:
-        working_directory: ~/demo-react-native/android
-        docker:
-            - image: circleci/android:api-34-node
-        steps:
-            - checkout:
-                  path: ~/demo-react-native
-
-            - attach_workspace:
-                  at: ~/demo-react-native
-
-            - restore_cache:
-                  key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-
-            - run: bundle install
+                  name: Install dependencies
+                  command: yarn install
 
             - save_cache:
-                  key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
                   paths:
-                      - vendor/bundle
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+
+            # Set up the JDK
+            - run:
+                  name: Set up JDK
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install -y openjdk-8-jdk
+                      sudo update-alternatives --config java
+
+            # Set up Gradle
+            - restore_cache:
+                  keys:
+                      - gradle-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+                      - gradle-
 
             - run:
-                  name: fastlane distribute
-                  command: |
-                      bundle exec fastlane distribute
+                  name: Assemble Release
+                  command: ./gradlew assembleRelease
 
-            - store_test_results:
-                  path: test-results
+            - save_cache:
+                  paths:
+                      - ~/.gradle
+                  key: gradle-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
 
+            # Store the APK as a CircleCI artifact
             - store_artifacts:
-                  path: test-results
+                  path: android/app/build/outputs/apk/release
+                  destination: apk
 
 workflows:
-    build_and_deploy:
+    version: 2
+    build:
         jobs:
-            - node
-            - android-build-and-test:
-                  requires:
-                      - node
+            - build
