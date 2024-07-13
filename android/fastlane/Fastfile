@@ -18,10 +18,11 @@ default_platform(:android)
   platform :android do
     desc "My awesome app"
     lane :distribute do
-      build_android_app(
-        task: "assembleRelease",
-        # build_type: "release"
-      )
+      # build_android_app(
+      #   task: "assemble",
+      #   build_type: "release"
+      # )
+      gradle("assembleRelease")
         # build_android_app is a built-in fastlane action.
         release = firebase_app_distribution(
             app: "1:940585881554:android:06a0d1c7163d3866af820b",
