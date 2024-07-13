@@ -91,6 +91,11 @@ jobs:
                   name: List fastlane directory contents
                   command: ls -la android/fastlane
 
+            - run:
+                  name: Chmod permissions
+                  command: sudo chmod +x ./gradlew
+                  working_directory: android
+
             # Install Fastlane
             - run:
                   name: Install Fastlane
@@ -101,7 +106,7 @@ jobs:
             - run:
                   name: Deploy to Firebase
                   command: bundle exec fastlane distribute
-                  # working_directory: android
+                  working_directory: android
 
 workflows:
     version: 2
