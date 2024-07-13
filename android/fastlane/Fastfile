@@ -22,12 +22,16 @@ default_platform(:android)
       #   task: "assemble",
       #   build_type: "release"
       # )
-      gradle("assembleRelease")
+
+      gradle(
+          task: "assemble",
+          build_type: "Release"
+        )
         # build_android_app is a built-in fastlane action.
         release = firebase_app_distribution(
             app: "1:940585881554:android:06a0d1c7163d3866af820b",
             testers: "vineetdixit.vns@gmail.com, tester2@yopmail.com",
-            release_notes: "Lots of amazing new features to test out, this is just a test to check circle ci is now working with fastlane!"
+            release_notes: "Pakka this is just a test to check circle ci is now working with fastlane!"
         )
     end
 end
