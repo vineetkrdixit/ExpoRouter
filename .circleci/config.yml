@@ -24,6 +24,10 @@ jobs:
             - run:
                   name: Install Yarn
                   command: sudo npm install -g yarn
+            - run:
+                  name: Chmod permissions
+                  command: sudo chmod +x ./gradlew
+                  working_directory: android
 
             # Download and cache dependencies
             - restore_cache:
