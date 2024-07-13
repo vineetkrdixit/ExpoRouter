@@ -71,7 +71,7 @@ jobs:
             - image: cimg/ruby:3.0.0
         environment:
             # Set JAVA_HOME to the correct path based on the Docker image used
-            JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+            JAVA_HOME: C:\Program Files\Microsoft\jdk-17.0.10.7-hotspot
         working_directory: android
         steps:
             - checkout
