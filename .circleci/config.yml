@@ -76,7 +76,7 @@ jobs:
 
     deploy_firebase:
         docker:
-            - image: cimg/ruby:2.7.4
+            - image: cimg/ruby:3.0.0
         working_directory: android
         steps:
             - checkout
