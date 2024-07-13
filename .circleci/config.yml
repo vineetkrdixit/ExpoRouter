@@ -139,8 +139,10 @@ jobs:
             - run:
                   name: Install Node.js and npm
                   command: |
-                      choco install nodejs-lts
-                      refreshenv
+                      choco install nvm
+                      nvm install lts
+                      nvm use lts
+                      refreshen
 
             # Install Yarn
             - run:
