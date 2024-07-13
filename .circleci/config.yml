@@ -99,7 +99,8 @@ jobs:
             # Run Fastlane to deploy to Firebase
             - run:
                   name: Deploy to Firebase
-                  command: fastlane distribute
+                  command: bundle exec fastlane distribute
+                  working_directory: android
 
 workflows:
     version: 2
