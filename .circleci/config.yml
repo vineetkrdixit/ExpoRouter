@@ -55,14 +55,6 @@ jobs:
             - restore_cache:
                   keys:
                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-                      - v1-gradle-
-
-            # - run:
-            #       name: Assemble Release
-            #       command: |
-            #           ./gradlew assembleRelease
-            #       working_directory: android
-            #       no_output_timeout: 30m
 
             - save_cache:
                   paths:
@@ -71,12 +63,15 @@ jobs:
 
             # Store the APK as a CircleCI artifact
             # - store_artifacts:
-            #       path: android/app/build/outputs/apk/release
-            #       destination: apk
+            #     path: android/app/build/outputs/apk/release
+            #     destination: apk
 
     deploy_firebase:
         docker:
             - image: cimg/ruby:3.0.0
+        environment:
+            # Set JAVA_HOME to the correct path based on the Docker image used
+            JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
         working_directory: android
         steps:
             - checkout
