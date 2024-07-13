@@ -142,7 +142,7 @@ jobs:
                       choco install nvm
                       nvm install lts
                       nvm use lts
-                      refreshen
+                      refreshenv
 
             # Install Yarn
             - run:
