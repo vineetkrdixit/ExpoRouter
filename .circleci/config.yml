@@ -81,6 +81,16 @@ jobs:
         steps:
             - checkout
 
+            # Debugging step to list the contents of the android directory
+            - run:
+                  name: List android directory contents
+                  command: ls -la ~/repo/android
+
+            # Debugging step to list the contents of the fastlane directory
+            - run:
+                  name: List fastlane directory contents
+                  command: ls -la ~/repo/android/fastlane
+
             # Install Fastlane
             - run:
                   name: Install Fastlane
