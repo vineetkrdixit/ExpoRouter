@@ -76,7 +76,7 @@ jobs:
 
     deploy_firebase:
         docker:
-            - image: circleci/ruby:2.7.0
+            - image: cimg/ruby@latest
         working_directory: ~/repo/android
         steps:
             - checkout
