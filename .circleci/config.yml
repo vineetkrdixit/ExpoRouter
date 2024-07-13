@@ -96,6 +96,4 @@ workflows:
     build_and_deploy:
         jobs:
             # - build
-            - deploy_firebase:
-                  requires:
-                      - build
+            - deploy_firebase
