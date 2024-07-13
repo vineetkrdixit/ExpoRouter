@@ -124,7 +124,7 @@ executors:
     windows:
         machine:
             resource_class: windows.medium
-            image: windows-server-2019:201908-08
+            image: image: windows-server-2022-gui:edge
             shell: powershell.exe -ExecutionPolicy Bypass
 
 jobs:
