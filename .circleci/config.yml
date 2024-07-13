@@ -211,10 +211,15 @@ jobs:
                   command: powershell -Command "chmod +x ./gradlew"
                   working_directory: android
 
+            # Install the correct Bundler version
+            - run:
+                  name: Install Bundler 2.5.14
+                  command: gem install bundler -v 2.5.14
+
             # Install Fastlane
             - run:
                   name: Install Fastlane
-                  command: powershell -Command "bundle install"
+                  command: powershell -Command "bundle _2.5.14_ install"
                   working_directory: android
 
             # Run Fastlane to deploy to Firebase
