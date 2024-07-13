@@ -197,12 +197,12 @@ jobs:
             # Debugging step to list the contents of the android directory
             - run:
                   name: List android directory contents
-                  command: powershell -Command "ls -la android"
+                  command: powershell -Command "Get-ChildItem -Force android"
 
             # Debugging step to list the contents of the fastlane directory
             - run:
                   name: List fastlane directory contents
-                  command: powershell -Command "ls -la android/fastlane"
+                  command: powershell -Command "Get-ChildItem -Force android/fastlane"
 
             - run:
                   name: Chmod permissions
