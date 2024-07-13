@@ -53,7 +53,7 @@ jobs:
             # Set up Gradle
             - restore_cache:
                   keys:
-                      - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "app/build.gradle" }}
+                      - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
                       - v1-gradle-
 
             - run:
@@ -66,7 +66,7 @@ jobs:
             - save_cache:
                   paths:
                       - ~/.gradle
-                  key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "app/build.gradle" }}
+                  key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
 
             # Store the APK as a CircleCI artifact
             - store_artifacts:
