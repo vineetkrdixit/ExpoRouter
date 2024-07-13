@@ -140,8 +140,8 @@ jobs:
                   name: Install Node.js and npm
                   command: |
                       choco install nvm
-                      nvm install lts
-                      nvm use lts
+                      nvm install 20.11.0
+                      nvm use 20.11.0
                       refreshenv
 
             # Install Yarn
@@ -195,6 +195,15 @@ jobs:
             JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.10.7-hotspot"
         steps:
             - checkout
+
+            # Install Node.js 20.11.0
+            - run:
+                  name: Install Node.js 20.11.0
+                  command: |
+                      choco install nvm
+                      nvm install 20.11.0
+                      nvm use 20.11.0
+                      refreshenv
 
             # Debugging step to list the contents of the android directory
             - run:
