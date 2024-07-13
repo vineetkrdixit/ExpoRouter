@@ -1,10 +1,16 @@
 version: 2.1
 
+orbs:
+    node: circleci/node@5
+
 executors:
     android:
-        docker:
-            - image: circleci/android:api-30
-        working_directory: ~/repo
+    docker:
+        - image: reactnativecommunity/react-native-android:latest
+    environment:
+        GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+    working_directory: ~/repo
+    resource_class: 'xlarge'
 
 jobs:
     build:
