@@ -73,6 +73,23 @@ jobs:
                   path: android/app/build/outputs/apk/release
                   destination: apk
 
+      deploy_firebase:
+        docker:
+            - image: circleci/ruby:2.6
+        working_directory: ~/repo/android
+        steps:
+            - checkout
+
+            # Install Fastlane
+            - run:
+                  name: Install Fastlane
+                  command: sudo gem install fastlane -NV
+
+            # Run Fastlane to deploy to Firebase
+            - run:
+                  name: Deploy to Firebase
+                  command: fastlane distribute
+
 workflows:
     version: 2
     build:
