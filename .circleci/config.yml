@@ -94,7 +94,8 @@ jobs:
             # Install Fastlane
             - run:
                   name: Install Fastlane
-                  command: sudo gem install fastlane -NV
+                  command: bundle install
+                  working_directory: android
 
             # Run Fastlane to deploy to Firebase
             - run:
