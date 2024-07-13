@@ -9,7 +9,7 @@ jobs:
             - image: reactnativecommunity/react-native-android:latest
         environment:
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-        working_directory: ~/repo/android
+        working_directory: ~/repo
         steps:
             - checkout
 
@@ -32,7 +32,7 @@ jobs:
             # Download and cache dependencies
             - restore_cache:
                   keys:
-                      - v1-dependencies-{{ checksum "../package.json" }}
+                      - v1-dependencies-{{ checksum "package.json" }}
                       - v1-dependencies-
 
             - run:
@@ -42,7 +42,7 @@ jobs:
             - save_cache:
                   paths:
                       - node_modules
-                  key: v1-dependencies-{{ checksum "../package.json" }}
+                  key: v1-dependencies-{{ checksum "package.json" }}
 
             # Set up the JDK
             - run:
@@ -53,7 +53,7 @@ jobs:
             # Set up Gradle
             - restore_cache:
                   keys:
-                      - v1-gradle-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+                      - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "app/build.gradle" }}
                       - v1-gradle-
 
             - run:
@@ -66,7 +66,7 @@ jobs:
             - save_cache:
                   paths:
                       - ~/.gradle
-                  key: v1-gradle-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+                  key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "app/build.gradle" }}
 
             # Store the APK as a CircleCI artifact
             - store_artifacts:
