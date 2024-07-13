@@ -59,7 +59,7 @@ jobs:
             - run:
                   name: Assemble Release
                   command: |
-                      ./gradlew --build-cache --max-workers 4 --no-daemon --continue assembleRelease --stacktrace
+                      ./gradlew assembleRelease
                   working_directory: android
                   no_output_timeout: 30m
 
