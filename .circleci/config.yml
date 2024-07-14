@@ -69,10 +69,7 @@
 #     deploy_firebase:
 #         docker:
 #             - image: cimg/ruby:3.0.0
-#         #   environment:
-#         #       # Set JAVA_HOME to the correct path based on the Docker image used
-#         #       JAVA_HOME: C:\Program Files\Microsoft\jdk-17.0.10.7-hotspot
-#         #   set JAVA_HOME="C:\Program Files\Microsoft\jdk-17.0.10.7-hotspot"
+
 #         working_directory: android
 #         steps:
 #             - checkout
@@ -116,15 +113,13 @@
 version: 2.1
 
 orbs:
-    node: circleci/node@5
-    windows: circleci/windows@1.0.0
-    windows-defender: circleci/windows-defender@0.0.2
+    win: circleci/windows@5.0
 
 executors:
     windows:
         machine:
-            resource_class: windows.medium
-            image: windows-server-2022-gui:edge
+            resource_class: windows.large
+            image: windows-server-2022-gui:current
             shell: powershell.exe -ExecutionPolicy Bypass
 
 jobs:
