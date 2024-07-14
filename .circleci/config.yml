@@ -1,133 +1,15 @@
-# version: 2.1
-
-# orbs:
-#     node: circleci/node@5
-
-# jobs:
-#     build:
-#         docker:
-#             - image: reactnativecommunity/react-native-android:latest
-#         environment:
-#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-#         working_directory: ~/repo
-#         steps:
-#             - checkout
-
-#             # Install Node.js and npm
-#             - run:
-#                   name: Install Node.js and npm
-#                   command: |
-#                       sudo apt-get update
-#                       sudo apt-get install -y nodejs npm
-
-#             # Install Yarn
-#             - run:
-#                   name: Install Yarn
-#                   command: sudo npm install -g yarn
-
-#             - run:
-#                   name: Chmod permissions
-#                   command: sudo chmod +x ./gradlew
-#                   working_directory: android
-
-#             # Download and cache dependencies
-#             - restore_cache:
-#                   keys:
-#                       - v1-dependencies-{{ checksum "package.json" }}
-#                       - v1-dependencies-
-
-#             - run:
-#                   name: Install dependencies
-#                   command: yarn install
-
-#             - save_cache:
-#                   paths:
-#                       - node_modules
-#                   key: v1-dependencies-{{ checksum "package.json" }}
-
-#             # Set up the JDK
-#             - run:
-#                   name: Set up JDK
-#                   command: |
-#                       sudo apt-get update
-
-#             # Set up Gradle
-#             - restore_cache:
-#                   keys:
-#                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-
-#             - save_cache:
-#                   paths:
-#                       - ~/.gradle
-#                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-
-#             # Store the APK as a CircleCI artifact
-#             # - store_artifacts:
-#             #     path: android/app/build/outputs/apk/release
-#             #     destination: apk
-
-#     deploy_firebase:
-#         docker:
-#             - image: cimg/ruby:3.0.0
-
-#         working_directory: android
-#         steps:
-#             - checkout
-
-#             # Debugging step to list the contents of the android directory
-#             - run:
-#                   name: List android directory contents
-#                   command: ls -la android
-
-#             # Debugging step to list the contents of the fastlane directory
-#             - run:
-#                   name: List fastlane directory contents
-#                   command: ls -la android/fastlane
-
-#             - run:
-#                   name: Chmod permissions
-#                   command: sudo chmod +x ./gradlew
-#                   working_directory: android
-
-#             # Install Fastlane
-#             - run:
-#                   name: Install Fastlane
-#                   command: bundle install
-#                   working_directory: android
-
-#             # Run Fastlane to deploy to Firebase
-#             - run:
-#                   name: Deploy to Firebase
-#                   command: bundle exec fastlane distribute
-#                   working_directory: android
-
-# workflows:
-#     version: 2
-#     build_and_deploy:
-#         jobs:
-#             - build
-#             - deploy_firebase:
-#                   requires:
-#                       - build
 version: 2.1
 
 orbs:
-    win: circleci/windows@5.0
     node: circleci/node@5
-#     ruby: circleci/ruby@3.0.0
-
-executors:
-    windows:
-        machine:
-            resource_class: windows.large
-            image: windows-server-2022-gui:current
-            shell: powershell.exe -ExecutionPolicy Bypass
 
 jobs:
     build:
-        executor: windows
+        docker:
+            - image: reactnativecommunity/react-native-android:latest
         environment:
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+        working_directory: ~/repo
         steps:
             - checkout
 
@@ -135,19 +17,17 @@ jobs:
             - run:
                   name: Install Node.js and npm
                   command: |
-                      choco install nvm
-                      nvm install 20.11.0
-                      nvm use 20.11.0
-                      refreshenv
+                      sudo apt-get update
+                      sudo apt-get install -y nodejs npm
 
             # Install Yarn
             - run:
                   name: Install Yarn
-                  command: npm install -g yarn
+                  command: sudo npm install -g yarn
 
             - run:
                   name: Chmod permissions
-                  command: powershell -Command "chmod +x ./gradlew"
+                  command: sudo chmod +x ./gradlew
                   working_directory: android
 
             # Download and cache dependencies
@@ -165,6 +45,12 @@ jobs:
                       - node_modules
                   key: v1-dependencies-{{ checksum "package.json" }}
 
+            # Set up the JDK
+            - run:
+                  name: Set up JDK
+                  command: |
+                      sudo apt-get update
+
             # Set up Gradle
             - restore_cache:
                   keys:
@@ -181,80 +67,29 @@ jobs:
             #     destination: apk
 
     deploy_firebase:
-        executor: windows
+        docker:
+            - image: cimg/ruby:3.0.0
+
+        working_directory: android
         steps:
             - checkout
-
-            # Install Node.js 20.11.0
-            - run:
-                  name: Install Node.js 20.11.0
-                  command: |
-                      choco install nvm
-                      nvm install 20.11.0
-                      nvm use 20.11.0
-                      refreshenv
 
             # Debugging step to list the contents of the android directory
             - run:
                   name: List android directory contents
-                  command: powershell -Command "Get-ChildItem -Force android"
+                  command: ls -la android
 
             # Debugging step to list the contents of the fastlane directory
             - run:
                   name: List fastlane directory contents
-                  command: powershell -Command "Get-ChildItem -Force android/fastlane"
+                  command: ls -la android/fastlane
 
             - run:
                   name: Chmod permissions
-                  command: powershell -Command "chmod +x ./gradlew"
+                  command: sudo chmod +x ./gradlew
                   working_directory: android
 
-            # # Install MSYS2
-            # - run:
-            #       name: Install MSYS2
-            #       command: |
-            #           choco install msys2
-            #           refreshenv
-
-            # # Install MSYS2 components manually
-            # - run:
-            #       name: Install MSYS2 components
-            #       command: |
-            #           ridk install 1 2 3
-
-            # Download and install MSYS2 manually using the installer
-            - run:
-                  name: Download MSYS2 Installer
-                  command: Invoke-WebRequest -Uri https://repo.msys2.org/distrib/x86_64/msys2-x86_64-20190524.exe
-
-            - run:
-                  name: Install MSYS2
-                  command: Start-Process -FilePath msys2-installer.exe -ArgumentList '/SILENT' -NoNewWindow -Wait
-
-            # Initialize MSYS2
-            - run:
-                  name: Initialize MSYS2
-                  command: C:\msys64\usr\bin\bash -lc "pacman -Syuu --noconfirm"
-
-            # Add MSYS2 to PATH
-            - run:
-                  name: Add MSYS2 to PATH
-                  command: |
-                      [System.Environment]::SetEnvironmentVariable('PATH', $Env:PATH + ';C:\msys64\usr\bin', [System.EnvironmentVariableTarget]::Machine)
-                      refreshenv
-
-            # Update Bundler
-            - run:
-                  name: Update Bundler
-                  command: gem install bundler
-
-            # Update Bundler in the lockfile
-            - run:
-                  name: Update Bundler in Lockfile
-                  command: bundle update --bundler
-                  working_directory: android
-
-            # Install Fastlane dependencies
+            # Install Fastlane
             - run:
                   name: Install Fastlane
                   command: bundle install
@@ -274,3 +109,168 @@ workflows:
             - deploy_firebase:
                   requires:
                       - build
+# version: 2.1
+
+# orbs:
+#     win: circleci/windows@5.0
+#     node: circleci/node@5
+# #     ruby: circleci/ruby@3.0.0
+
+# executors:
+#     windows:
+#         machine:
+#             resource_class: windows.large
+#             image: windows-server-2022-gui:current
+#             shell: powershell.exe -ExecutionPolicy Bypass
+
+# jobs:
+#     build:
+#         executor: windows
+#         environment:
+#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+#         steps:
+#             - checkout
+
+#             # Install Node.js and npm
+#             - run:
+#                   name: Install Node.js and npm
+#                   command: |
+#                       choco install nvm
+#                       nvm install 20.11.0
+#                       nvm use 20.11.0
+#                       refreshenv
+
+#             # Install Yarn
+#             - run:
+#                   name: Install Yarn
+#                   command: npm install -g yarn
+
+#             - run:
+#                   name: Chmod permissions
+#                   command: powershell -Command "chmod +x ./gradlew"
+#                   working_directory: android
+
+#             # Download and cache dependencies
+#             - restore_cache:
+#                   keys:
+#                       - v1-dependencies-{{ checksum "package.json" }}
+#                       - v1-dependencies-
+
+#             - run:
+#                   name: Install dependencies
+#                   command: yarn install
+
+#             - save_cache:
+#                   paths:
+#                       - node_modules
+#                   key: v1-dependencies-{{ checksum "package.json" }}
+
+#             # Set up Gradle
+#             - restore_cache:
+#                   keys:
+#                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+
+#             - save_cache:
+#                   paths:
+#                       - ~/.gradle
+#                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+
+#             # Store the APK as a CircleCI artifact
+#             # - store_artifacts:
+#             #     path: android/app/build/outputs/apk/release
+#             #     destination: apk
+
+#     deploy_firebase:
+#         executor: windows
+#         steps:
+#             - checkout
+
+#             # Install Node.js 20.11.0
+#             - run:
+#                   name: Install Node.js 20.11.0
+#                   command: |
+#                       choco install nvm
+#                       nvm install 20.11.0
+#                       nvm use 20.11.0
+#                       refreshenv
+
+#             # Debugging step to list the contents of the android directory
+#             - run:
+#                   name: List android directory contents
+#                   command: powershell -Command "Get-ChildItem -Force android"
+
+#             # Debugging step to list the contents of the fastlane directory
+#             - run:
+#                   name: List fastlane directory contents
+#                   command: powershell -Command "Get-ChildItem -Force android/fastlane"
+
+#             - run:
+#                   name: Chmod permissions
+#                   command: powershell -Command "chmod +x ./gradlew"
+#                   working_directory: android
+
+#             # # Install MSYS2
+#             # - run:
+#             #       name: Install MSYS2
+#             #       command: |
+#             #           choco install msys2
+#             #           refreshenv
+
+#             # # Install MSYS2 components manually
+#             # - run:
+#             #       name: Install MSYS2 components
+#             #       command: |
+#             #           ridk install 1 2 3
+
+#             # Download and install MSYS2 manually using the installer
+#             - run:
+#                   name: Download MSYS2 Installer
+#                   command: Invoke-WebRequest -Uri https://repo.msys2.org/distrib/x86_64/msys2-x86_64-20190524.exe
+
+#             - run:
+#                   name: Install MSYS2
+#                   command: Start-Process -FilePath msys2-installer.exe -ArgumentList '/SILENT' -NoNewWindow -Wait
+
+#             # Initialize MSYS2
+#             - run:
+#                   name: Initialize MSYS2
+#                   command: C:\msys64\usr\bin\bash -lc "pacman -Syuu --noconfirm"
+
+#             # Add MSYS2 to PATH
+#             - run:
+#                   name: Add MSYS2 to PATH
+#                   command: |
+#                       [System.Environment]::SetEnvironmentVariable('PATH', $Env:PATH + ';C:\msys64\usr\bin', [System.EnvironmentVariableTarget]::Machine)
+#                       refreshenv
+
+#             # Update Bundler
+#             - run:
+#                   name: Update Bundler
+#                   command: gem install bundler
+
+#             # Update Bundler in the lockfile
+#             - run:
+#                   name: Update Bundler in Lockfile
+#                   command: bundle update --bundler
+#                   working_directory: android
+
+#             # Install Fastlane dependencies
+#             - run:
+#                   name: Install Fastlane
+#                   command: bundle install
+#                   working_directory: android
+
+#             # Run Fastlane to deploy to Firebase
+#             - run:
+#                   name: Deploy to Firebase
+#                   command: bundle exec fastlane distribute
+#                   working_directory: android
+
+# workflows:
+#     version: 2
+#     build_and_deploy:
+#         jobs:
+#             - build
+#             - deploy_firebase:
+#                   requires:
+#                       - build
