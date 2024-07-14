@@ -221,10 +221,10 @@ jobs:
             #       name: Install MSYS2
             #       command: choco install msys2
 
-            #   # Run 'ridk install' to set up MSYS2
-            # - run:
-            #       name: Run ridk install
-            #       command: ridk install 1 2 3
+            # Run 'ridk install' to set up MSYS2
+            - run:
+                  name: Run ridk install
+                  command: ridk install 1 2 3
 
             # # Install the correct Bundler version
             # - run:
