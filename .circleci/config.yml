@@ -113,6 +113,7 @@ version: 2.1
 
 orbs:
     win: circleci/windows@5.0
+    node: circleci/node@5
 #     ruby: circleci/ruby@3.0.0
 
 executors:
@@ -124,7 +125,7 @@ executors:
 
 jobs:
     build:
-        executor: windows
+        #   executor: windows
         docker:
             - image: reactnativecommunity/react-native-android:latest
         environment:
@@ -182,7 +183,9 @@ jobs:
             #     destination: apk
 
     deploy_firebase:
-        executor: windows
+        #   executor: windows
+        docker:
+            - image: cimg/ruby:3.0.0
         steps:
             - checkout
 
