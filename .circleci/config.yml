@@ -363,14 +363,23 @@ jobs:
             - run:
                   name: Run ridk install
                   command: ridk install 1 2 3
-            # Install the correct Bundler version
+            # Update Bundler
             - run:
-                  name: Install Bundler 3.0.0
-                  command: gem install bundler -v 3.0.0
+                  name: Update Bundler
+                  command: gem update bundler
+            # Install Bundler version specified in Gemfile.lock
+            - run:
+                  name: Install Bundler
+                  command: gem install bundler
+            # Update Gemfile.lock
+            - run:
+                  name: Update Gemfile.lock
+                  command: powershell -Command "bundle update bundler && bundle install"
+                  working_directory: android
             # Install Fastlane
             - run:
                   name: Install Fastlane
-                  command: powershell -Command "bundle _3.0.0_ install"
+                  command: powershell -Command "bundle install"
                   working_directory: android
             # Run Fastlane to deploy to Firebase
             - run:
