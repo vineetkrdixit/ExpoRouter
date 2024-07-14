@@ -113,7 +113,7 @@ version: 2.1
 
 orbs:
     win: circleci/windows@5.0
-    ruby: circleci/ruby@3.0.0
+#     ruby: circleci/ruby@3.0.0
 
 executors:
     windows:
@@ -125,6 +125,8 @@ executors:
 jobs:
     build:
         executor: windows
+        docker:
+            - image: reactnativecommunity/react-native-android:latest
         environment:
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
@@ -181,6 +183,8 @@ jobs:
 
     deploy_firebase:
         executor: windows
+        docker:
+            - image: cimg/ruby:3.0.0
         steps:
             - checkout
 
