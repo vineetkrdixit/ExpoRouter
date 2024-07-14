@@ -365,12 +365,12 @@ jobs:
                   command: ridk install 1 2 3
             # Install the correct Bundler version
             - run:
-                  name: Install Bundler 2.5.14
-                  command: gem install bundler -v 2.5.14
+                  name: Install Bundler 3.0.0
+                  command: gem install bundler -v 3.0.0
             # Install Fastlane
             - run:
                   name: Install Fastlane
-                  command: powershell -Command "bundle _2.5.14_ install"
+                  command: powershell -Command "bundle _3.0.0_ install"
                   working_directory: android
             # Run Fastlane to deploy to Firebase
             - run:
