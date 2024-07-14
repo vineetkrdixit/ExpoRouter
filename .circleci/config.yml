@@ -285,7 +285,7 @@ orbs:
 executors:
     windows:
         machine:
-            resource_class: windows.medium
+            resource_class: windows.large
             image: windows-server-2022-gui:edge
             shell: powershell.exe -ExecutionPolicy Bypass
 
