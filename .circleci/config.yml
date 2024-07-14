@@ -214,8 +214,8 @@ jobs:
                   name: Install MSYS2
                   command: |
                       choco install msys2
-                      refreshenv
                       ridk install
+                      refreshenv
 
             # Update Bundler
             - run:
