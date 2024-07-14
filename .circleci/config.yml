@@ -183,8 +183,6 @@ jobs:
 
     deploy_firebase:
         executor: windows
-        docker:
-            - image: cimg/ruby:3.0.0
         steps:
             - checkout
 
