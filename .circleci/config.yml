@@ -221,10 +221,10 @@ jobs:
             #       name: Install MSYS2
             #       command: choco install msys2
 
-            # Run 'ridk install' to set up MSYS2
-            - run:
-                  name: Run ridk install
-                  command: ridk install 1 2 3
+            # # Run 'ridk install' to set up MSYS2
+            # - run:
+            #       name: Run ridk install
+            #       command: ridk install 1 2 3
 
             # # Install the correct Bundler version
             # - run:
@@ -234,13 +234,13 @@ jobs:
             # Install Fastlane
             - run:
                   name: Install Fastlane
-                  command: powershell -Command "bundle install"
+                  command: bundle install
                   working_directory: android
 
             # Run Fastlane to deploy to Firebase
             - run:
                   name: Deploy to Firebase
-                  command: powershell -Command "bundle exec fastlane distribute"
+                  command: bundle exec fastlane distribute
                   working_directory: android
 
 workflows:
