@@ -215,12 +215,12 @@ jobs:
                   command: |
                       choco install msys2
                       refreshenv
-            # Install ridk
+
+            # Install MSYS2 components manually
             - run:
-                  name: Install MSYS2
+                  name: Install MSYS2 components
                   command: |
-                      choco install ridk
-                      refreshenv
+                      ridk install 1 2 3
 
             # Update Bundler
             - run:
