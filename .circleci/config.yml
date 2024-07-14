@@ -125,9 +125,7 @@ executors:
 
 jobs:
     build:
-        #   executor: windows
-        docker:
-            - image: reactnativecommunity/react-native-android:latest
+        executor: windows
         environment:
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
@@ -183,9 +181,7 @@ jobs:
             #     destination: apk
 
     deploy_firebase:
-        #   executor: windows
-        docker:
-            - image: cimg/ruby:3.0.0
+        executor: windows
         steps:
             - checkout
 
