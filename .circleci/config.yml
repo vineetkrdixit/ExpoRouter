@@ -374,7 +374,7 @@ jobs:
             # Update Gemfile.lock
             - run:
                   name: Update Gemfile.lock
-                  command: powershell -Command "bundle update bundler && bundle install"
+                  command: powershell -Command "bundle update bundler; bundle install"
                   working_directory: android
             # Install Fastlane
             - run:
