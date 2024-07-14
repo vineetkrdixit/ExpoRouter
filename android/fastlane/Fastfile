@@ -23,6 +23,7 @@ default_platform(:android)
       #   build_type: "release"
       # )
 
+      gradle(task: "clean")
       gradle(
           task: "assemble",
           build_type: "Release"
