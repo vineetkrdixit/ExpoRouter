@@ -279,7 +279,7 @@ version: 2.1
 
 orbs:
     node: circleci/node@5
-    windows: circleci/windows@1.0.0
+    windows: circleci/windows@5.0
     windows-defender: circleci/windows-defender@0.0.2
 
 executors:
