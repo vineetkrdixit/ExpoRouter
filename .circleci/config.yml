@@ -215,15 +215,15 @@ jobs:
                   command: powershell -Command "chmod +x ./gradlew"
                   working_directory: android
 
-              # Install MSYS2
-            - run:
-                  name: Install MSYS2
-                  command: choco install msys2
+            #   # Install MSYS2
+            # - run:
+            #       name: Install MSYS2
+            #       command: choco install msys2
 
-              # Run 'ridk install' to set up MSYS2
-            - run:
-                  name: Run ridk install
-                  command: ridk install 1 2 3
+            #   # Run 'ridk install' to set up MSYS2
+            # - run:
+            #       name: Run ridk install
+            #       command: ridk install 1 2 3
 
             # Install the correct Bundler version
             - run:
