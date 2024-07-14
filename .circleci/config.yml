@@ -114,6 +114,7 @@ version: 2.1
 
 orbs:
     win: circleci/windows@5.0
+    bundle-install: toshimaru/bundle-install
 
 executors:
     windows:
@@ -215,20 +216,20 @@ jobs:
                   command: powershell -Command "chmod +x ./gradlew"
                   working_directory: android
 
-              # Install MSYS2
-            - run:
-                  name: Install MSYS2
-                  command: choco install msys2
+            #   # Install MSYS2
+            # - run:
+            #       name: Install MSYS2
+            #       command: choco install msys2
 
-              # Run 'ridk install' to set up MSYS2
-            - run:
-                  name: Run ridk install
-                  command: ridk install 1 2 3
+            #   # Run 'ridk install' to set up MSYS2
+            # - run:
+            #       name: Run ridk install
+            #       command: ridk install 1 2 3
 
-            # Install the correct Bundler version
-            - run:
-                  name: Install Bundler 2.5.14
-                  command: gem install bundler -v 2.5.14
+            # # Install the correct Bundler version
+            # - run:
+            #       name: Install Bundler 2.5.14
+            #       command: gem install bundler -v 2.5.14
 
             # Install Fastlane
             - run:
