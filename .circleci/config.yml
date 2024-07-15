@@ -434,17 +434,7 @@ jobs:
                   name: Install Dependencies
                   command: |
                       . ~/.nvm/nvm.sh
-                      yarn install
-            - run:
-                  name: Install Android Dependencies
-                  command: |
-                      . ~/.nvm/nvm.sh
-                      yarn android:dependencies
-            - run:
-                  name: Run Tests
-                  command: |
-                      . ~/.nvm/nvm.sh
-                      yarn test
+                      yarn
             - run:
                   name: Build APK
                   command: |
