@@ -405,7 +405,8 @@ version: 2.1
 
 orbs:
     node: circleci/node@5
-    executors:
+#     windows: circleci/windows@5.0
+executors:
     windows:
         machine:
             resource_class: windows.large
