@@ -478,7 +478,7 @@ jobs:
             #     destination: apk
 
     deploy_firebase:
-       executor: windows
+        executor: windows
 
         working_directory: C:\repo\android
         steps:
