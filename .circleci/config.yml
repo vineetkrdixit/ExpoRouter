@@ -397,6 +397,7 @@
 #                       - build
 
 # .circleci/config.yml
+# .circleci/config.yml
 version: 2.1
 
 executors:
@@ -411,18 +412,49 @@ jobs:
         steps:
             - checkout
             - run:
-                  name: Download Dependencies
-                  command: ./gradlew androidDependencies
+                  name: Install Node.js
+                  command: |
+                      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+                      . ~/.nvm/nvm.sh
+                      nvm install 20
+                      node -v
+            - run:
+                  name: Install Yarn
+                  command: |
+                      . ~/.nvm/nvm.sh
+                      npm install -g yarn
+                      yarn -v
+            - run:
+                  name: Install Java 17
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install -y openjdk-17-jdk
+                      java -version
+            - run:
+                  name: Install Dependencies
+                  command: |
+                      . ~/.nvm/nvm.sh
+                      yarn install
+            - run:
+                  name: Install Android Dependencies
+                  command: |
+                      . ~/.nvm/nvm.sh
+                      yarn android:dependencies
             - run:
                   name: Run Tests
-                  command: ./gradlew test
+                  command: |
+                      . ~/.nvm/nvm.sh
+                      yarn test
             - run:
                   name: Build APK
-                  command: ./gradlew assembleRelease
+                  command: |
+                      . ~/.nvm/nvm.sh
+                      cd android
+                      ./gradlew assembleRelease
             - persist_to_workspace:
                   root: .
                   paths:
-                      - app/build/outputs/apk/release/app-release.apk
+                      - android/app/build/outputs/apk/release/app-release.apk
 
     deploy:
         machine:
@@ -430,6 +462,9 @@ jobs:
         steps:
             - attach_workspace:
                   at: .
+            - run:
+                  name: Install Chocolatey
+                  command: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
             - run:
                   name: Install Ruby
                   command: choco install ruby -y
@@ -439,6 +474,18 @@ jobs:
             - run:
                   name: Install Fastlane
                   command: gem install fastlane
+            - run:
+                  name: Install Java 17
+                  command: choco install jdk17 -y
+            - run:
+                  name: Install Node.js
+                  command: choco install nodejs-lts -y
+            - run:
+                  name: Install Yarn
+                  command: npm install -g yarn
+            - run:
+                  name: Bundle Install
+                  command: bundle install
             - run:
                   name: Deploy to Firebase
                   command: fastlane android deploy_to_firebase
