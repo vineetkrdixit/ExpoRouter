@@ -1,114 +1,119 @@
-# version: 2.1
+version: 2.1
 
-# orbs:
-#     node: circleci/node@5
+orbs:
+    node: circleci/node@5
 
-# jobs:
-#     build:
-#         docker:
-#             - image: reactnativecommunity/react-native-android:latest
-#         environment:
-#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-#         working_directory: ~/repo
-#         steps:
-#             - checkout
+jobs:
+    build:
+        docker:
+            - image: reactnativecommunity/react-native-android:latest
+        environment:
+            GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+        working_directory: ~/repo
+        steps:
+            - checkout
 
-#             # Install Node.js and npm
-#             - run:
-#                   name: Install Node.js and npm
-#                   command: |
-#                       sudo apt-get update
-#                       sudo apt-get install -y nodejs npm
+            # Install Node.js and npm
+            - run:
+                  name: Install Node.js and npm
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install -y nodejs npm
 
-#             # Install Yarn
-#             - run:
-#                   name: Install Yarn
-#                   command: sudo npm install -g yarn
+            # Install Yarn
+            - run:
+                  name: Install Yarn
+                  command: sudo npm install -g yarn
 
-#             - run:
-#                   name: Chmod permissions
-#                   command: sudo chmod +x ./gradlew
-#                   working_directory: android
+            - run:
+                  name: Chmod permissions
+                  command: sudo chmod +x ./gradlew
+                  working_directory: android
 
-#             # Download and cache dependencies
-#             - restore_cache:
-#                   keys:
-#                       - v1-dependencies-{{ checksum "package.json" }}
-#                       - v1-dependencies-
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      - v1-dependencies-
 
-#             - run:
-#                   name: Install dependencies
-#                   command: yarn install
+            - run:
+                  name: Install dependencies
+                  command: yarn install
 
-#             - save_cache:
-#                   paths:
-#                       - node_modules
-#                   key: v1-dependencies-{{ checksum "package.json" }}
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
 
-#             # Set up the JDK
-#             - run:
-#                   name: Set up JDK
-#                   command: |
-#                       sudo apt-get update
+            # Set up the JDK
+            - run:
+                  name: Install Java 17
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install -y openjdk-17-jdk
+                      echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"' >> $BASH_ENV
+                      echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> $BASH_ENV
+                      source $BASH_ENV
+                      java -version
 
-#             # Set up Gradle
-#             - restore_cache:
-#                   keys:
-#                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+            # Set up Gradle
+            - restore_cache:
+                  keys:
+                      - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
 
-#             - save_cache:
-#                   paths:
-#                       - ~/.gradle
-#                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+            - save_cache:
+                  paths:
+                      - ~/.gradle
+                  key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
 
-#             # Store the APK as a CircleCI artifact
-#             # - store_artifacts:
-#             #     path: android/app/build/outputs/apk/release
-#             #     destination: apk
+            # Store the APK as a CircleCI artifact
+            # - store_artifacts:
+            #     path: android/app/build/outputs/apk/release
+            #     destination: apk
 
-#     deploy_firebase:
-#         docker:
-#             - image: cimg/ruby:3.0.0
+    deploy_firebase:
+        docker:
+            - image: cimg/ruby:3.0.0
 
-#         working_directory: android
-#         steps:
-#             - checkout
+        working_directory: android
+        steps:
+            - checkout
 
-#             # Debugging step to list the contents of the android directory
-#             - run:
-#                   name: List android directory contents
-#                   command: ls -la android
+            # Debugging step to list the contents of the android directory
+            - run:
+                  name: List android directory contents
+                  command: ls -la android
 
-#             # Debugging step to list the contents of the fastlane directory
-#             - run:
-#                   name: List fastlane directory contents
-#                   command: ls -la android/fastlane
+            # Debugging step to list the contents of the fastlane directory
+            - run:
+                  name: List fastlane directory contents
+                  command: ls -la android/fastlane
 
-#             - run:
-#                   name: Chmod permissions
-#                   command: sudo chmod +x ./gradlew
-#                   working_directory: android
+            - run:
+                  name: Chmod permissions
+                  command: sudo chmod +x ./gradlew
+                  working_directory: android
 
-#             # Install Fastlane
-#             - run:
-#                   name: Install Fastlane
-#                   command: bundle install
-#                   working_directory: android
+            # Install Fastlane
+            - run:
+                  name: Install Fastlane
+                  command: bundle install
+                  working_directory: android
 
-#             # Run Fastlane to deploy to Firebase
-#             - run:
-#                   name: Deploy to Firebase
-#                   command: bundle exec fastlane distribute
-#                   working_directory: android
+            # Run Fastlane to deploy to Firebase
+            - run:
+                  name: Deploy to Firebase
+                  command: bundle exec fastlane distribute
+                  working_directory: android
 
-# workflows:
-#     version: 2
-#     build_and_deploy:
-#         jobs:
-#             - build
-#             - deploy_firebase:
-#                   requires:
-#                       - build
+workflows:
+    version: 2
+    build_and_deploy:
+        jobs:
+            - build
+            - deploy_firebase:
+                  requires:
+                      - build
 # version: 2.1
 
 # orbs:
@@ -398,106 +403,106 @@
 
 # .circleci/config.yml
 # .circleci/config.yml
-version: 2.1
+# version: 2.1
 
-executors:
-    windows_executor:
-        machine:
-            image: windows-default
+# executors:
+#     windows_executor:
+#         machine:
+#             image: windows-default
 
-jobs:
-    build:
-        docker:
-            - image: reactnativecommunity/react-native-android:latest
-        steps:
-            - checkout
-            - run:
-                  name: Install Node.js
-                  command: |
-                      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-                      . ~/.nvm/nvm.sh
-                      nvm install 20
-                      node -v
-            - run:
-                  name: Install Yarn
-                  command: |
-                      . ~/.nvm/nvm.sh
-                      npm install -g yarn
-                      yarn -v
-            - run:
-                  name: Install Java 17
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install -y openjdk-17-jdk
-                      echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"' >> $BASH_ENV
-                      echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> $BASH_ENV
-                      source $BASH_ENV
-                      java -version
-            - run:
-                  name: Install Dependencies
-                  command: |
-                      . ~/.nvm/nvm.sh
-                      yarn
-            - run:
-                  name: Chmod permissions
-                  command: sudo chmod +x ./gradlew
-                  working_directory: android
-            - run:
-                  name: Clean APK
-                  command: |
-                      . ~/.nvm/nvm.sh
-                      cd android
-                      ./gradlew clean
-            - run:
-                  name: Build APK
-                  command: |
-                      . ~/.nvm/nvm.sh
-                      cd android
-                      ./gradlew assembleRelease
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - android/app/build/outputs/apk/release/app-release.apk
+# jobs:
+#     build:
+#         docker:
+#             - image: reactnativecommunity/react-native-android:latest
+#         steps:
+#             - checkout
+#             - run:
+#                   name: Install Node.js
+#                   command: |
+#                       curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+#                       . ~/.nvm/nvm.sh
+#                       nvm install 20
+#                       node -v
+#             - run:
+#                   name: Install Yarn
+#                   command: |
+#                       . ~/.nvm/nvm.sh
+#                       npm install -g yarn
+#                       yarn -v
+#             - run:
+#                   name: Install Java 17
+#                   command: |
+#                       sudo apt-get update
+#                       sudo apt-get install -y openjdk-17-jdk
+#                       echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"' >> $BASH_ENV
+#                       echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> $BASH_ENV
+#                       source $BASH_ENV
+#                       java -version
+#             - run:
+#                   name: Install Dependencies
+#                   command: |
+#                       . ~/.nvm/nvm.sh
+#                       yarn
+#             - run:
+#                   name: Chmod permissions
+#                   command: sudo chmod +x ./gradlew
+#                   working_directory: android
+#             - run:
+#                   name: Clean APK
+#                   command: |
+#                       . ~/.nvm/nvm.sh
+#                       cd android
+#                       ./gradlew clean
+#             - run:
+#                   name: Build APK
+#                   command: |
+#                       . ~/.nvm/nvm.sh
+#                       cd android
+#                       ./gradlew assembleRelease
+#             - persist_to_workspace:
+#                   root: .
+#                   paths:
+#                       - android/app/build/outputs/apk/release/app-release.apk
 
-    deploy:
-        machine:
-            image: windows-default
-        steps:
-            - attach_workspace:
-                  at: .
-            - run:
-                  name: Install Chocolatey
-                  command: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-            - run:
-                  name: Install Ruby
-                  command: choco install ruby -y
-            - run:
-                  name: Install Bundler
-                  command: gem install bundler
-            - run:
-                  name: Install Fastlane
-                  command: gem install fastlane
-            - run:
-                  name: Install Java 17
-                  command: choco install jdk17 -y
-            - run:
-                  name: Install Node.js
-                  command: choco install nodejs-lts -y
-            - run:
-                  name: Install Yarn
-                  command: npm install -g yarn
-            - run:
-                  name: Bundle Install
-                  command: bundle install
-            - run:
-                  name: Deploy to Firebase
-                  command: fastlane android deploy_to_firebase
+#     deploy:
+#         machine:
+#             image: windows-default
+#         steps:
+#             - attach_workspace:
+#                   at: .
+#             - run:
+#                   name: Install Chocolatey
+#                   command: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+#             - run:
+#                   name: Install Ruby
+#                   command: choco install ruby -y
+#             - run:
+#                   name: Install Bundler
+#                   command: gem install bundler
+#             - run:
+#                   name: Install Fastlane
+#                   command: gem install fastlane
+#             - run:
+#                   name: Install Java 17
+#                   command: choco install jdk17 -y
+#             - run:
+#                   name: Install Node.js
+#                   command: choco install nodejs-lts -y
+#             - run:
+#                   name: Install Yarn
+#                   command: npm install -g yarn
+#             - run:
+#                   name: Bundle Install
+#                   command: bundle install
+#             - run:
+#                   name: Deploy to Firebase
+#                   command: fastlane android deploy_to_firebase
 
-workflows:
-    version: 2
-    build_and_deploy:
-        jobs:
-            - build
-            - deploy:
-                  requires:
-                      - build
+# workflows:
+#     version: 2
+#     build_and_deploy:
+#         jobs:
+#             - build
+#             - deploy:
+#                   requires:
+#                       - build
