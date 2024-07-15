@@ -408,7 +408,7 @@ executors:
 jobs:
     build:
         docker:
-            - image: circleci/android:latest
+            - image: reactnativecommunity/react-native-android:latest
         steps:
             - checkout
             - run:
