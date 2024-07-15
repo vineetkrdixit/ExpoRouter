@@ -409,7 +409,7 @@ orbs:
 jobs:
     build:
         machine:
-            image: windows
+            image: windows-server-2022-gui:edge
         environment:
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         working_directory: C:\repo
@@ -474,7 +474,7 @@ jobs:
 
     deploy_firebase:
         machine:
-            image: windows
+            image: windows-server-2022-gui:edge
 
         working_directory: C:\repo\android
         steps:
