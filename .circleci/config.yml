@@ -436,6 +436,10 @@ jobs:
                       . ~/.nvm/nvm.sh
                       yarn
             - run:
+                  name: Chmod permissions
+                  command: powershell -Command "chmod +x ./gradlew"
+                  working_directory: android
+            - run:
                   name: Build APK
                   command: |
                       . ~/.nvm/nvm.sh
