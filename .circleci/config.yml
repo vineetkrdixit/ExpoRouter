@@ -423,11 +423,11 @@ jobs:
             - checkout
 
             # Install Node.js and npm
-            - run:
-                  name: Install Node.js and npm
-                  command: |
-                      choco install nodejs-lts
-                      choco install npm
+            # - run:
+            #       name: Install Node.js and npm
+            #       command: |
+            #           choco install nodejs-lts
+            #           choco install npm
 
             # Install Yarn
             - run:
