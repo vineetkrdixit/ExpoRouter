@@ -275,123 +275,179 @@
 #                   requires:
 #                       - build
 
+# version: 2.1
+
+# orbs:
+#     node: circleci/node@5
+#     windows: circleci/windows@5.0
+#     windows-defender: circleci/windows-defender@0.0.2
+
+# executors:
+#     windows:
+#         machine:
+#             resource_class: windows.large
+#             image: windows-server-2022-gui:edge
+#             shell: powershell.exe -ExecutionPolicy Bypass
+
+# jobs:
+#     build:
+#         executor: windows
+#         environment:
+#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+#         steps:
+#             - checkout
+#             # Install Node.js and npm
+#             - run:
+#                   name: Install Node.js and npm
+#                   command: |
+#                       choco install nvm
+#                       nvm install lts
+#                       nvm use lts
+#                       refreshenv
+#             # Install Yarn
+#             - run:
+#                   name: Install Yarn
+#                   command: npm install -g yarn
+#             - run:
+#                   name: Chmod permissions
+#                   command: powershell -Command "chmod +x ./gradlew"
+#                   working_directory: android
+#             # Download and cache dependencies
+#             - restore_cache:
+#                   keys:
+#                       - v1-dependencies-{{ checksum "package.json" }}
+#                       - v1-dependencies-
+#             - run:
+#                   name: Install dependencies
+#                   command: yarn install
+#             - save_cache:
+#                   paths:
+#                       - node_modules
+#                   key: v1-dependencies-{{ checksum "package.json" }}
+#             # Set up Gradle
+#             - restore_cache:
+#                   keys:
+#                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+#             - save_cache:
+#                   paths:
+#                       - ~/.gradle
+#                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+#             # Store the APK as a CircleCI artifact
+#             # - store_artifacts:
+#             #     path: android/app/build/outputs/apk/release
+#             #     destination: apk
+
+#     deploy_firebase:
+#         executor: windows
+#         # environment:
+#         #   JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.10.7-hotspot"
+#         steps:
+#             - checkout
+#             # Debugging step to list the contents of the android directory
+#             - run:
+#                   name: List android directory contents
+#                   command: powershell -Command "Get-ChildItem -Force android"
+#             # Debugging step to list the contents of the fastlane directory
+#             - run:
+#                   name: List fastlane directory contents
+#                   command: powershell -Command "Get-ChildItem -Force android/fastlane"
+#             - run:
+#                   name: Chmod permissions
+#                   command: powershell -Command "chmod +x ./gradlew"
+#                   working_directory: android
+#             # Install MSYS2
+#             - run:
+#                   name: Install MSYS2
+#                   command: choco install msys2
+#             # Run 'ridk install' to set up MSYS2
+#             - run:
+#                   name: Run ridk install
+#                   command: ridk install 1 2 3
+#             # Update Bundler
+#             - run:
+#                   name: Update Bundler
+#                   command: gem update bundler
+#             # Install Bundler version specified in Gemfile.lock
+#             - run:
+#                   name: Install Bundler
+#                   command: gem install bundler
+#             # Update Gemfile.lock
+#             - run:
+#                   name: Update Gemfile.lock
+#                   command: powershell -Command "bundle update bundler; bundle install"
+#                   working_directory: android
+#             # Install Fastlane
+#             - run:
+#                   name: Install Fastlane
+#                   command: powershell -Command "bundle install"
+#                   working_directory: android
+#             # Run Fastlane to deploy to Firebase
+#             - run:
+#                   name: Deploy to Firebase
+#                   command: powershell -Command "bundle exec fastlane distribute"
+#                   working_directory: android
+
+# workflows:
+#     version: 2
+#     build_and_deploy:
+#         jobs:
+#             - build
+#             - deploy_firebase:
+#                   requires:
+#                       - build
+
+# .circleci/config.yml
 version: 2.1
 
-orbs:
-    node: circleci/node@5
-    windows: circleci/windows@5.0
-    windows-defender: circleci/windows-defender@0.0.2
-
 executors:
-    windows:
+    windows_executor:
         machine:
-            resource_class: windows.large
-            image: windows-server-2022-gui:edge
-            shell: powershell.exe -ExecutionPolicy Bypass
+            image: windows-default
 
 jobs:
     build:
-        executor: windows
-        environment:
-            GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+        docker:
+            - image: circleci/android:latest
         steps:
             - checkout
-            # Install Node.js and npm
             - run:
-                  name: Install Node.js and npm
-                  command: |
-                      choco install nvm
-                      nvm install lts
-                      nvm use lts
-                      refreshenv
-            # Install Yarn
+                  name: Download Dependencies
+                  command: ./gradlew androidDependencies
             - run:
-                  name: Install Yarn
-                  command: npm install -g yarn
+                  name: Run Tests
+                  command: ./gradlew test
             - run:
-                  name: Chmod permissions
-                  command: powershell -Command "chmod +x ./gradlew"
-                  working_directory: android
-            # Download and cache dependencies
-            - restore_cache:
-                  keys:
-                      - v1-dependencies-{{ checksum "package.json" }}
-                      - v1-dependencies-
-            - run:
-                  name: Install dependencies
-                  command: yarn install
-            - save_cache:
+                  name: Build APK
+                  command: ./gradlew assembleRelease
+            - persist_to_workspace:
+                  root: .
                   paths:
-                      - node_modules
-                  key: v1-dependencies-{{ checksum "package.json" }}
-            # Set up Gradle
-            - restore_cache:
-                  keys:
-                      - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-            - save_cache:
-                  paths:
-                      - ~/.gradle
-                  key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-            # Store the APK as a CircleCI artifact
-            # - store_artifacts:
-            #     path: android/app/build/outputs/apk/release
-            #     destination: apk
+                      - app/build/outputs/apk/release/app-release.apk
 
-    deploy_firebase:
-        executor: windows
-        # environment:
-        #   JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.10.7-hotspot"
+    deploy:
+        machine:
+            image: windows-default
         steps:
-            - checkout
-            # Debugging step to list the contents of the android directory
+            - attach_workspace:
+                  at: .
             - run:
-                  name: List android directory contents
-                  command: powershell -Command "Get-ChildItem -Force android"
-            # Debugging step to list the contents of the fastlane directory
-            - run:
-                  name: List fastlane directory contents
-                  command: powershell -Command "Get-ChildItem -Force android/fastlane"
-            - run:
-                  name: Chmod permissions
-                  command: powershell -Command "chmod +x ./gradlew"
-                  working_directory: android
-            # Install MSYS2
-            - run:
-                  name: Install MSYS2
-                  command: choco install msys2
-            # Run 'ridk install' to set up MSYS2
-            - run:
-                  name: Run ridk install
-                  command: ridk install 1 2 3
-            # Update Bundler
-            - run:
-                  name: Update Bundler
-                  command: gem update bundler
-            # Install Bundler version specified in Gemfile.lock
+                  name: Install Ruby
+                  command: choco install ruby -y
             - run:
                   name: Install Bundler
                   command: gem install bundler
-            # Update Gemfile.lock
-            - run:
-                  name: Update Gemfile.lock
-                  command: powershell -Command "bundle update bundler; bundle install"
-                  working_directory: android
-            # Install Fastlane
             - run:
                   name: Install Fastlane
-                  command: powershell -Command "bundle install"
-                  working_directory: android
-            # Run Fastlane to deploy to Firebase
+                  command: gem install fastlane
             - run:
                   name: Deploy to Firebase
-                  command: powershell -Command "bundle exec fastlane distribute"
-                  working_directory: android
+                  command: fastlane android deploy_to_firebase
 
 workflows:
     version: 2
     build_and_deploy:
         jobs:
             - build
-            - deploy_firebase:
+            - deploy:
                   requires:
                       - build
