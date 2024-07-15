@@ -23,11 +23,11 @@ default_platform(:android)
       #   build_type: "release"
       # )
 
-      gradle(task: "clean")
-      gradle(
-          task: "assemble",
-          build_type: "Release"
-        )
+      # gradle(task: "clean")
+      # gradle(
+      #     task: "assemble",
+      #     build_type: "Release"
+      #   )
         # build_android_app is a built-in fastlane action.
         release = firebase_app_distribution(
             app: "1:940585881554:android:06a0d1c7163d3866af820b",
