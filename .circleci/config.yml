@@ -443,6 +443,12 @@ jobs:
                   command: sudo chmod +x ./gradlew
                   working_directory: android
             - run:
+                  name: Clean APK
+                  command: |
+                      . ~/.nvm/nvm.sh
+                      cd android
+                      ./gradlew clean
+            - run:
                   name: Build APK
                   command: |
                       . ~/.nvm/nvm.sh
