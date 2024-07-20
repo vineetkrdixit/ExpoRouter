@@ -1,522 +1,135 @@
-# version: 2.1
-
-# orbs:
-#     node: circleci/node@5
-
-# jobs:
-#     build:
-#         docker:
-#             - image: reactnativecommunity/react-native-android:latest
-#         environment:
-#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-#         working_directory: ~/repo
-#         steps:
-#             - checkout
-
-#             # Install Node.js and npm
-#             - run:
-#                   name: Install Node.js and npm
-#                   command: |
-#                       sudo apt-get update
-#                       sudo apt-get install -y nodejs npm
-
-#             # Install Yarn
-#             - run:
-#                   name: Install Yarn
-#                   command: sudo npm install -g yarn
-
-#             - run:
-#                   name: Chmod permissions
-#                   command: sudo chmod +x ./gradlew
-#                   working_directory: android
-
-#             # Download and cache dependencies
-#             - restore_cache:
-#                   keys:
-#                       - v1-dependencies-{{ checksum "package.json" }}
-#                       - v1-dependencies-
-
-#             - run:
-#                   name: Install dependencies
-#                   command: yarn install
-
-#             - save_cache:
-#                   paths:
-#                       - node_modules
-#                   key: v1-dependencies-{{ checksum "package.json" }}
-
-#             # Set up the JDK
-#             - run:
-#                   name: Install Java 17
-#                   command: |
-#                       sudo apt-get update
-#                       sudo apt-get install -y openjdk-17-jdk
-#                       echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"' >> $BASH_ENV
-#                       echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> $BASH_ENV
-#                       source $BASH_ENV
-#                       java -version
-
-#             # Set up Gradle
-#             - restore_cache:
-#                   keys:
-#                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-
-#             - save_cache:
-#                   paths:
-#                       - ~/.gradle
-#                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-
-#             # Store the APK as a CircleCI artifact
-#             # - store_artifacts:
-#             #     path: android/app/build/outputs/apk/release
-#             #     destination: apk
-
-#     deploy_firebase:
-#         docker:
-#             - image: cimg/ruby:3.0.0
-
-#         working_directory: android
-#         steps:
-#             - checkout
-
-#             # Debugging step to list the contents of the android directory
-#             - run:
-#                   name: List android directory contents
-#                   command: ls -la android
-
-#             # Debugging step to list the contents of the fastlane directory
-#             - run:
-#                   name: List fastlane directory contents
-#                   command: ls -la android/fastlane
-
-#             - run:
-#                   name: Chmod permissions
-#                   command: sudo chmod +x ./gradlew
-#                   working_directory: android
-
-#             # Install Fastlane
-#             - run:
-#                   name: Install Fastlane
-#                   command: bundle install
-#                   working_directory: android
-
-#             # Run Fastlane to deploy to Firebase
-#             - run:
-#                   name: Deploy to Firebase
-#                   command: bundle exec fastlane distribute
-#                   working_directory: android
-
-# workflows:
-#     version: 2
-#     build_and_deploy:
-#         jobs:
-#             - build
-#             - deploy_firebase:
-#                   requires:
-#                       - build
-# version: 2.1
-
-# orbs:
-#     win: circleci/windows@5.0
-#     node: circleci/node@5
-# #     ruby: circleci/ruby@3.0.0
-
-# executors:
-#     windows:
-#         machine:
-#             resource_class: windows.large
-#             image: windows-server-2022-gui:current
-#             shell: powershell.exe -ExecutionPolicy Bypass
-
-# jobs:
-#     build:
-#         executor: windows
-#         environment:
-#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-#         steps:
-#             - checkout
-
-#             # Install Node.js and npm
-#             - run:
-#                   name: Install Node.js and npm
-#                   command: |
-#                       choco install nvm
-#                       nvm install 20.11.0
-#                       nvm use 20.11.0
-#                       refreshenv
-
-#             # Install Yarn
-#             - run:
-#                   name: Install Yarn
-#                   command: npm install -g yarn
-
-#             - run:
-#                   name: Chmod permissions
-#                   command: powershell -Command "chmod +x ./gradlew"
-#                   working_directory: android
-
-#             # Download and cache dependencies
-#             - restore_cache:
-#                   keys:
-#                       - v1-dependencies-{{ checksum "package.json" }}
-#                       - v1-dependencies-
-
-#             - run:
-#                   name: Install dependencies
-#                   command: yarn install
-
-#             - save_cache:
-#                   paths:
-#                       - node_modules
-#                   key: v1-dependencies-{{ checksum "package.json" }}
-
-#             # Set up Gradle
-#             - restore_cache:
-#                   keys:
-#                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-
-#             - save_cache:
-#                   paths:
-#                       - ~/.gradle
-#                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-
-#             # Store the APK as a CircleCI artifact
-#             # - store_artifacts:
-#             #     path: android/app/build/outputs/apk/release
-#             #     destination: apk
-
-#     deploy_firebase:
-#         executor: windows
-#         steps:
-#             - checkout
-
-#             # Install Node.js 20.11.0
-#             - run:
-#                   name: Install Node.js 20.11.0
-#                   command: |
-#                       choco install nvm
-#                       nvm install 20.11.0
-#                       nvm use 20.11.0
-#                       refreshenv
-
-#             # Debugging step to list the contents of the android directory
-#             - run:
-#                   name: List android directory contents
-#                   command: powershell -Command "Get-ChildItem -Force android"
-
-#             # Debugging step to list the contents of the fastlane directory
-#             - run:
-#                   name: List fastlane directory contents
-#                   command: powershell -Command "Get-ChildItem -Force android/fastlane"
-
-#             - run:
-#                   name: Chmod permissions
-#                   command: powershell -Command "chmod +x ./gradlew"
-#                   working_directory: android
-
-#             # # Install MSYS2
-#             # - run:
-#             #       name: Install MSYS2
-#             #       command: |
-#             #           choco install msys2
-#             #           refreshenv
-
-#             # # Install MSYS2 components manually
-#             # - run:
-#             #       name: Install MSYS2 components
-#             #       command: |
-#             #           ridk install 1 2 3
-
-#             # Download and install MSYS2 manually using the installer
-#             - run:
-#                   name: Download MSYS2 Installer
-#                   command: Invoke-WebRequest -Uri https://repo.msys2.org/distrib/x86_64/msys2-x86_64-20190524.exe
-
-#             - run:
-#                   name: Install MSYS2
-#                   command: Start-Process -FilePath msys2-installer.exe -ArgumentList '/SILENT' -NoNewWindow -Wait
-
-#             # Initialize MSYS2
-#             - run:
-#                   name: Initialize MSYS2
-#                   command: C:\msys64\usr\bin\bash -lc "pacman -Syuu --noconfirm"
-
-#             # Add MSYS2 to PATH
-#             - run:
-#                   name: Add MSYS2 to PATH
-#                   command: |
-#                       [System.Environment]::SetEnvironmentVariable('PATH', $Env:PATH + ';C:\msys64\usr\bin', [System.EnvironmentVariableTarget]::Machine)
-#                       refreshenv
-
-#             # Update Bundler
-#             - run:
-#                   name: Update Bundler
-#                   command: gem install bundler
-
-#             # Update Bundler in the lockfile
-#             - run:
-#                   name: Update Bundler in Lockfile
-#                   command: bundle update --bundler
-#                   working_directory: android
-
-#             # Install Fastlane dependencies
-#             - run:
-#                   name: Install Fastlane
-#                   command: bundle install
-#                   working_directory: android
-
-#             # Run Fastlane to deploy to Firebase
-#             - run:
-#                   name: Deploy to Firebase
-#                   command: bundle exec fastlane distribute
-#                   working_directory: android
-
-# workflows:
-#     version: 2
-#     build_and_deploy:
-#         jobs:
-#             - build
-#             - deploy_firebase:
-#                   requires:
-#                       - build
-
-# version: 2.1
-
-# orbs:
-#     node: circleci/node@5
-#     windows: circleci/windows@5.0
-#     windows-defender: circleci/windows-defender@0.0.2
-
-# executors:
-#     windows:
-#         machine:
-#             resource_class: windows.large
-#             image: windows-server-2022-gui:edge
-#             shell: powershell.exe -ExecutionPolicy Bypass
-
-# jobs:
-#     build:
-#         executor: windows
-#         environment:
-#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-#         steps:
-#             - checkout
-#             # Install Node.js and npm
-#             - run:
-#                   name: Install Node.js and npm
-#                   command: |
-#                       choco install nvm
-#                       nvm install lts
-#                       nvm use lts
-#                       refreshenv
-#             # Install Yarn
-#             - run:
-#                   name: Install Yarn
-#                   command: npm install -g yarn
-#             - run:
-#                   name: Chmod permissions
-#                   command: powershell -Command "chmod +x ./gradlew"
-#                   working_directory: android
-#             # Download and cache dependencies
-#             - restore_cache:
-#                   keys:
-#                       - v1-dependencies-{{ checksum "package.json" }}
-#                       - v1-dependencies-
-#             - run:
-#                   name: Install dependencies
-#                   command: yarn install
-#             - save_cache:
-#                   paths:
-#                       - node_modules
-#                   key: v1-dependencies-{{ checksum "package.json" }}
-#             # Set up Gradle
-#             - restore_cache:
-#                   keys:
-#                       - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-#             - save_cache:
-#                   paths:
-#                       - ~/.gradle
-#                   key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-#             # Store the APK as a CircleCI artifact
-#             # - store_artifacts:
-#             #     path: android/app/build/outputs/apk/release
-#             #     destination: apk
-
-#     deploy_firebase:
-#         executor: windows
-#         # environment:
-#         #   JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.10.7-hotspot"
-#         steps:
-#             - checkout
-#             # Debugging step to list the contents of the android directory
-#             - run:
-#                   name: List android directory contents
-#                   command: powershell -Command "Get-ChildItem -Force android"
-#             # Debugging step to list the contents of the fastlane directory
-#             - run:
-#                   name: List fastlane directory contents
-#                   command: powershell -Command "Get-ChildItem -Force android/fastlane"
-#             - run:
-#                   name: Chmod permissions
-#                   command: powershell -Command "chmod +x ./gradlew"
-#                   working_directory: android
-#             # Install MSYS2
-#             - run:
-#                   name: Install MSYS2
-#                   command: choco install msys2
-#             # Run 'ridk install' to set up MSYS2
-#             - run:
-#                   name: Run ridk install
-#                   command: ridk install 1 2 3
-#             # Update Bundler
-#             - run:
-#                   name: Update Bundler
-#                   command: gem update bundler
-#             # Install Bundler version specified in Gemfile.lock
-#             - run:
-#                   name: Install Bundler
-#                   command: gem install bundler
-#             # Update Gemfile.lock
-#             - run:
-#                   name: Update Gemfile.lock
-#                   command: powershell -Command "bundle update bundler; bundle install"
-#                   working_directory: android
-#             # Install Fastlane
-#             - run:
-#                   name: Install Fastlane
-#                   command: powershell -Command "bundle install"
-#                   working_directory: android
-#             # Run Fastlane to deploy to Firebase
-#             - run:
-#                   name: Deploy to Firebase
-#                   command: powershell -Command "bundle exec fastlane distribute"
-#                   working_directory: android
-
-# workflows:
-#     version: 2
-#     build_and_deploy:
-#         jobs:
-#             - build
-#             - deploy_firebase:
-#                   requires:
-#                       - build
-
 version: 2.1
 
 orbs:
     node: circleci/node@5
 #     windows: circleci/windows@5.0
-executors:
-    windows:
-        machine:
-            resource_class: windows.large
-            image: windows-server-2022-gui:edge
-            shell: powershell.exe -ExecutionPolicy Bypass
 
 jobs:
-    build:
-        executor: windows
-        environment:
-            GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-        working_directory: C:\repo
+  build:
+    docker:
+      - image: reactnativecommunity/react-native-android:latest
+    environment:
+      GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
+    working_directory: ~/repo
         steps:
             - checkout
-
-            # Install Node.js and npm
-            # - run:
-            #       name: Install Node.js and npm
-            #       command: |
-            #           choco install nodejs-lts
-            #           choco install npm
-
-            # Install Yarn
-            - run:
-                  name: Install Yarn
-                  command: npm install -g yarn
-
-            - run:
-                  name: Chmod permissions
-                  command: icacls .\gradlew /grant Everyone:F
-                  working_directory: C:\repo\android
-
-            # Download and cache dependencies
-            - restore_cache:
-                  keys:
-                      - v1-dependencies-{{ checksum "package.json" }}
-                      - v1-dependencies-
-
             - run:
                   name: Install dependencies
                   command: yarn install
-
-            - save_cache:
-                  paths:
-                      - C:\repo\node_modules
-                  key: v1-dependencies-{{ checksum "package.json" }}
-
-            # Set up the JDK
             - run:
-                  name: Install Java 17
-                  command: |
-                      choco install openjdk17
-                      setx JAVA_HOME "C:\Program Files\AdoptOpenJDK\jdk-17"
-                      set PATH=%JAVA_HOME%\bin;%PATH%
-                      java -version
+                  name: Update Dependencies
+                  command: sudo apt-get update
 
-            # Set up Gradle
+            - run:
+                name: Chmod permissions
+                command: sudo chmod +x ./gradlew
+                working_directory: android
+
+            - run:
+                name: Install Fastlane
+                command: bundle install
+                working_directory: android
+
+            # Create cache checksum files
+            - run:
+                name: Create cache checksum files
+                command: |
+                    mkdir -p ~/.tmp/checksumfiles
+                    find . -type f -name 'build.gradle' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/build.gradle
+                    find . -type f -name 'settings.gradle' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/settings.gradle
+
             - restore_cache:
-                  keys:
-                      - v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
+                keys:
+                    - gradle-wrapper-{{ arch }}-{{ checksum "./android/gradle/wrapper/gradle-wrapper.properties" }}-{{ .Environment.CACHE_VERSION }}
+
+            - restore_cache:
+                keys:
+                    - gradle-home-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/build.gradle" }}-{{ checksum "~/.tmp/checksumfiles/settings.gradle" }}-{{ .Environment.CACHE_VERSION }}
+
+            - restore_cache:
+                name: Restoring Gradle Build caches
+                keys:
+                    - gradle-build-cache-{{ .Revision }}
+
+            - run:
+                name: Dispersing Gradle Build caches for restoring
+                command: |
+                    echo '#!/bin/bash
+                    # Function to log messages
+                    log() {
+                    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1"
+                    }
+                    
+                    # Check if gradle-build-caches directory exists
+                    if [ -d ~/gradle-build-caches ]; then
+                    log "Directory ~/gradle-build-caches exists."
+                    
+                    # Check if gradle-build-caches directory is not empty
+                    if [ -n "$(ls -A ~/gradle-build-caches)" ]; then
+                    log "Directory ~/gradle-build-caches is not empty."
+                    
+                    # Get the size of the gradle-build-caches directory
+                    size_before=$(du -sh ~/gradle-build-caches | cut -f1)
+                    log "Size of ~/gradle-build-caches before moving: $size_before"
+                    
+                    # Remove existing build cache files
+                    rm -rf ~/.gradle/caches/build-cache-*
+                    log "Removed existing build cache files in ~/.gradle/caches/."
+                    
+                    # Create the cache directory if it does not exist
+                    mkdir -p ~/.gradle/caches/
+                    log "Ensured ~/.gradle/caches/ directory exists."
+                    
+                    # Move files from gradle-build-caches to ~/.gradle/caches/
+                    mv ~/gradle-build-caches/* ~/.gradle/caches/
+                    log "Moved files from ~/gradle-build-caches to ~/.gradle/caches/."
+                    
+                    # Get the size of the new gradle caches directory
+                    size_after=$(du -sh ~/.gradle/caches | cut -f1)
+                    log "Size of ~/.gradle/caches after moving: $size_after"
+                    else
+                    log "Directory ~/gradle-build-caches is empty. No files to move."
+                    fi
+                    else
+                    log "Directory ~/gradle-build-caches does not exist."
+                    fi
+                    
+                    # Always return true
+                    true' > disperse_gradle_caches.sh
+                    
+            - run:
+                name: Set Script Permissions
+                command: chmod +x disperse_gradle_caches.sh
+
+            - run:
+                name: Execute Script
+                command: ./disperse_gradle_caches.sh
+
+            # Save cache
+            - save_cache:
+                name: Saving Gradle wrapper cache
+                paths:
+                    - ~/.gradle/wrapper/
+                key: gradle-wrapper-{{ arch }}-{{ checksum "./android/gradle/wrapper/gradle-wrapper.properties" }}-{{ .Environment.CACHE_VERSION }}
 
             - save_cache:
-                  paths:
-                      - C:\Users\circleci\.gradle
-                  key: v1-gradle-{{ checksum "android/build.gradle" }}-{{ checksum "android/app/build.gradle" }}
-
-            # Store the APK as a CircleCI artifact
-            # - store_artifacts:
-            #     path: android/app/build/outputs/apk/release
-            #     destination: apk
-
-    deploy_firebase:
-        executor: windows
-
-        working_directory: C:\repo\android
-        steps:
-            - checkout
-
-            # Debugging step to list the contents of the android directory
-            - run:
-                  name: List android directory contents
-                  command: dir
-
-            # Debugging step to list the contents of the fastlane directory
-            - run:
-                  name: List fastlane directory contents
-                  command: dir fastlane
+                name: Saving Gradle home cache
+                paths:
+                    - ~/.gradle/caches/
+                key: gradle-home-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/build.gradle" }}-{{ checksum "~/.tmp/checksumfiles/settings.gradle" }}-{{ .Environment.CACHE_VERSION }}
 
             - run:
-                  name: Chmod permissions
-                  command: icacls .\gradlew /grant Everyone:F
-                  working_directory: C:\repo\android
-
-            # Install Fastlane
+                name: Build Android APK
+                command: |
+                  ./gradlew --build-cache --max-workers 4 --no-daemon --continue assembleRelease --stacktrace
+                working_directory: android
+                no_output_timeout: 30m
             - run:
-                  name: Install Fastlane
-                  command: gem install fastlane
-                  working_directory: C:\repo\android
-
-            # Run Fastlane to deploy to Firebase
-            - run:
-                  name: Deploy to Firebase
-                  command: fastlane distribute
-                  working_directory: C:\repo\android
-
+                name: Deploy to Firebase
+                command: bundle exec fastlane distribute
+                working_directory: android
 workflows:
     version: 2
     build_and_deploy:
         jobs:
             - build
-            - deploy_firebase:
-                  requires:
-                      - build
