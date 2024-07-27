@@ -13,20 +13,45 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+# default_platform(:android)
+
+#   platform :android do
+#     desc "My awesome app"
+#     lane :distribute do
+#       # build_android_app(
+#       #   task: "assemble",
+#       #   build_type: "release"
+#       # )
+
+#       # gradle(task: "clean")
+#       # gradle(
+#       #     task: "assemble",
+#       #     build_type: "Release"
+#       #   )
+#         # build_android_app is a built-in fastlane action.
+#     firebase_app_distribution(
+#             app: "1:940585881554:android:06a0d1c7163d3866af820b",
+#             testers: "vineetdixit.vns@gmail.com, tester2@yopmail.com",
+#             release_notes: "Pakka this is just a test to check circle ci is now working with fastlane!"
+#         )
+#     end
+# end
+
+# Fastfile
 default_platform(:android)
+# just
 
 platform :android do
-  desc "Distribute app to Firebase App Distribution"
-  lane :distribute_to_firebase do
-    gradle(
-      task: "assemble",
-      build_type: "Release"
-    )
-
+  desc "Deploy app to Firebase"
+  lane :distribute do
+    # jhjh
+    # gradle(
+    #   task: "assembleRelease"
+    # )
     firebase_app_distribution(
-      app: "1:940585881554:android:06a0d1c7163d3866af820b", # Replace with your Firebase App ID
-      groups: "your_tester_group", # Replace with your tester group
-      release_notes: "Automated release notes for this build.",
+      app: "1:940585881554:android:06a0d1c7163d3866af820b",
+      testers: "vineetdixit.vns@gmail.com, tester2@yopmail.com",
+      release_notes: "This is a new release ioio",
       firebase_cli_token: ENV["FIREBASE_TOKEN"]
     )
   end
