@@ -43,13 +43,13 @@ default_platform(:android)
 
 platform :android do
   desc "Deploy app to Firebase"
-  lane :distribute do
+  lane :distribute do || options
     gradle(
       task: "assembleRelease"
     )
     firebase_app_distribution(
       app: "1:940585881554:android:06a0d1c7163d3866af820b", # Replace with your Firebase app ID
-      service_credentials_file:"./sa.json",
+      service_credentials_file:"../sa.json",
       testers: "vineetdixit.vns@gmail.com, tester2@yopmail.com",
       release_notes: "This is a new release"
     )
