@@ -45,9 +45,9 @@ platform :android do
   desc "Deploy app to Firebase"
   lane :distribute do
     # jhjh
-    gradle(
-      task: "assembleRelease"
-    )
+    # gradle(
+    #   task: "assembleRelease"
+    # )
     firebase_app_distribution(
       app: "1:940585881554:android:06a0d1c7163d3866af820b",
       service_credentials_file:GOOGLE_APPLICATION_CREDENTIALS,
