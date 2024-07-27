@@ -185,6 +185,11 @@ jobs:
                       - v1-gradle-cache-
 
             - run:
+                  name: Decrypting Service_account_key
+                  command: |
+                      echo $Google_service_account | base64 -d > ~/repo/sa.json
+
+            - run:
                   name: Set permissions for Gradle
                   command: chmod +x ./android/gradlew
 
@@ -208,6 +213,11 @@ jobs:
                   paths:
                       - ~/.gradle
                   key: v1-gradle-cache-{{ checksum "android/build.gradle" }}
+
+            - run:
+                  name: Deploy to Firebase
+                  command: bundle exec fastlane distribute
+                  working_directory: android
 
             - store_artifacts:
                   path: android/app/build/outputs/apk/release/app-release.apk

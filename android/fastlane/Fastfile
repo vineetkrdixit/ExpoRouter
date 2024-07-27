@@ -39,6 +39,7 @@
 
 # Fastfile
 default_platform(:android)
+# Google_service_account
 
 platform :android do
   desc "Deploy app to Firebase"
