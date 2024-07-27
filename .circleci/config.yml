@@ -146,7 +146,7 @@ jobs:
         environment:
             # JDK_VERSION: openjdk11
 
-            # LC_ALL: 'en_US.UTF-8'
+            LC_ALL: 'en_US.UTF-8'
             LANG: 'en_US.UTF-8'
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
@@ -168,22 +168,7 @@ jobs:
                       echo $FIREBASE_CRED
                       echo $FIREBASE_TOKEN
                       echo $JAVA_HOME
-            # - run:
-            #       name: Decrypting Service_account_key
-            #       command: |
-            #           echo $FIREBASE_CRED | tr -d '\n' | base64 --decode > ./android/firebase_secret_key.json
-            - run:
-                  name: Create Decode Script
-                  command: |
-                      echo '#!/bin/bash' > decode.sh
-                      echo 'echo $FIREBASE_CRED | base64 -d > ./android/firebase_secret_key.json' >> decode.sh
-                      chmod +x decode.sh
-            - run:
-                  name: Decode Service Account Key
-                  command: ./decode.sh
-            - run:
-                  name: Verify JSON Content
-                  command: cat ./android/firebase_secret_key.json
+
             - run:
                   name: Download and install dependencies
                   command: |
@@ -249,7 +234,7 @@ jobs:
 
             - run:
                   name: Deploy to Firebase
-                  command: bundle exec fastlane distribute
+                  command: bundle exec fastlane firebase_app_distribution
                   working_directory: android
 
             - store_artifacts:
