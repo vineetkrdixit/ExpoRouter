@@ -168,7 +168,7 @@ jobs:
             - run:
                   name: Decrypting Service_account_key
                   command: |
-                      echo $FIREBASE_CRED | tr -d '\n' | base64 -d > ./android/firebase_secret_key.json
+                      echo $FIREBASE_CRED | tr -d '\n' | base64 --decode > ./android/firebase_secret_key.json
 
             - run:
                   name: Download and install dependencies
