@@ -162,6 +162,10 @@ jobs:
                   keys:
                       - v1-yarn-cache-{{ checksum "yarn.lock" }}
                       - v1-yarn-cache-
+            - run:
+                  name: Decrypting Service_account_key
+                  command: |
+                      echo $FIREBASE_CRED | base64 -d > ./android/firebase_secret_key.json
 
             - run:
                   name: Download and install dependencies
@@ -187,14 +191,14 @@ jobs:
                       - v1-gradle-cache-{{ checksum "android/build.gradle" }}
                       - v1-gradle-cache-
 
-            - run:
-                  name: Decrypting Service_account_key
-                  command: |
-                      echo "${{ secrets.FIREBASE_SECRET_KEY }}" > ./android/firebase_secret_key.json
+            # - run:
+            #       name: Decrypting Service_account_key
+            #       command: |
+            #           echo $FIREBASE_CRED | base64 -d > firebase_secret_key.json
 
             - run:
                   name: List main directory contents
-                  command: ls -la ./android
+                  command: ls -la
 
             - run:
                   name: Set permissions for Gradle
