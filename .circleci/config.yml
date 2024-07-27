@@ -139,7 +139,7 @@ version: 2.1
 executors:
     android:
         docker:
-            - image: circleci/android:2021.04.1
+            - image: cimg/android:2023.10.2
 
 jobs:
     build:
