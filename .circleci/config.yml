@@ -189,6 +189,11 @@ jobs:
                   command: chmod +x ./android/gradlew
 
             - run:
+                  name: Install Fastlane
+                  command: bundle install
+                  working_directory: android
+
+            - run:
                   name: Clean and Build APK
                   command: |
                       cd android
