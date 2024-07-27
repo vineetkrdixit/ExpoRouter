@@ -187,7 +187,11 @@ jobs:
             - run:
                   name: Decrypting Service_account_key
                   command: |
-                      echo $Google_service_account | base64 --decode > $sa.json
+                      echo $Google_service_account | base64 --decode > $saa.json
+
+            - run:
+                  name: List main directory contents
+                  command: ls -la
 
             - run:
                   name: Set permissions for Gradle
