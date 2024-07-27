@@ -164,7 +164,10 @@ jobs:
                       - v1-yarn-cache-
             - run:
                   name: Print Environment Variable for Debugging
-                  command: echo $FIREBASE_CRED
+                  command: |
+                      echo $FIREBASE_CRED
+                      echo $FIREBASE_TOKEN
+                      echo $JAVA_HOME
             - run:
                   name: Decrypting Service_account_key
                   command: |
