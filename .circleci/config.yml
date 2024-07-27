@@ -150,6 +150,11 @@ jobs:
         steps:
             - checkout
 
+            # Ensure the correct directory
+            - run:
+                  name: Ensure correct directory
+                  command: pwd && ls -la
+
             # Cache Yarn dependencies
             - restore_cache:
                   keys:
@@ -161,6 +166,7 @@ jobs:
                   command: |
                       sudo apt-get update
                       sudo apt-get install -y nodejs
+                      sudo apt-get install -y npm
                       curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
                       export NVM_DIR="$HOME/.nvm"
                       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -181,7 +187,7 @@ jobs:
 
             - run:
                   name: Set permissions for Gradle
-                  command: chmod +x ./gradlew
+                  command: chmod +x ./android/gradlew
 
             - run:
                   name: Build APK
@@ -196,8 +202,8 @@ jobs:
                   key: v1-gradle-cache-{{ checksum "android/build.gradle" }}
 
             - store_artifacts:
-                  path: android/app/build/outputs/apk/release/app-release.apk
-                  destination: app-release.apk
+                  path: android/app/build/outputs/apk/release/appp-release.apk
+                  destination: appp-release.apk
 
 workflows:
     version: 2
