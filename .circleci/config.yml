@@ -168,7 +168,7 @@ jobs:
                       sudo apt-get install -y curl
                       curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
                       export NVM_DIR="$HOME/.nvm"
-                      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                       nvm install 20.11.0
                       nvm use 20.11.0
                       npm install -g yarn
@@ -193,6 +193,9 @@ jobs:
                   name: Clean and Build APK
                   command: |
                       cd android
+                      export NVM_DIR="$HOME/.nvm"
+                      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                      nvm use 20.11.0
                       chmod +x gradlew
                       ./gradlew clean
                       ./gradlew assembleRelease
