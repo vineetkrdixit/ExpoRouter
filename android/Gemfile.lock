@@ -5,6 +5,7 @@ GEM
       base64
       nkf
       rexml
+    abbrev (0.1.2)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     artifactory (3.0.17)
@@ -27,6 +28,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     babosa (1.0.4)
     base64 (0.2.0)
+    bigdecimal (3.1.8)
     claide (1.1.0)
     colored (1.2)
     colored2 (3.1.2)
@@ -165,6 +167,7 @@ GEM
     mini_mime (1.1.5)
     multi_json (1.15.0)
     multipart-post (2.4.1)
+    mutex_m (0.2.0)
     nanaimo (0.3.0)
     naturally (2.2.1)
     nkf (0.2.0)
@@ -220,8 +223,12 @@ PLATFORMS
   x64-mingw-ucrt
 
 DEPENDENCIES
+  abbrev
+  bigdecimal
+  bundler (~> 2.0)
   fastlane
   fastlane-plugin-firebase_app_distribution
+  mutex_m
 
 BUNDLED WITH
    2.5.14
