@@ -39,6 +39,7 @@
 
 # Fastfile
 default_platform(:android)
+# just
 
 platform :android do
   desc "Deploy app to Firebase"
