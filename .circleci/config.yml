@@ -190,6 +190,13 @@ jobs:
                   command: chmod +x ./android/gradlew
 
             - run:
+                  name: Clean Gradle
+                  command: |
+                      cd android
+                      chmod +x gradlew
+                      ./gradlew clean
+
+            - run:
                   name: Build APK
                   command: |
                       cd android
