@@ -43,7 +43,7 @@ default_platform(:android)
 
 platform :android do
   desc "Deploy app to Firebase"
-  lane :distribute do || options
+  lane :distribute do 
     gradle(
       task: "assembleRelease"
     )
