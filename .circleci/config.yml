@@ -187,7 +187,7 @@ jobs:
             - run:
                   name: Decrypting Service_account_key
                   command: |
-                      echo $FIREBASE_SERVICE | base64 -d > firebase_service.json
+                      echo $FIREBASE_SERVICE | base64 -d > firebase_service.json.b64
 
             - run:
                   name: List main directory contents
