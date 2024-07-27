@@ -202,6 +202,11 @@ jobs:
                   command: bundle install
                   working_directory: android
 
+            - run:
+                  name: Install Fastlane
+                  command: bundle update fastlane
+                  working_directory: android
+
             # - run:D
             #       name: Clean and Build APK
             #       command: |
