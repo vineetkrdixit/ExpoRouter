@@ -145,6 +145,9 @@ jobs:
         executor: android
         environment:
             # JDK_VERSION: openjdk11
+
+            LC_ALL: 'en_US.UTF-8'
+            LANG: 'en_US.UTF-8'
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
             - checkout
