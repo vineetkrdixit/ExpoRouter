@@ -202,7 +202,7 @@ jobs:
                   command: bundle install
                   working_directory: android
 
-            # - run:
+            # - run:D
             #       name: Clean and Build APK
             #       command: |
             #           cd android
