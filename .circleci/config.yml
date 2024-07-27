@@ -234,7 +234,7 @@ jobs:
 
             - run:
                   name: Deploy to Firebase
-                  command: bundle exec fastlane firebase_app_distribution
+                  command: bundle exec fastlane distribute_to_firebase
                   working_directory: android
 
             - store_artifacts:
