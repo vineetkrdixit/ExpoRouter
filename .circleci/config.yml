@@ -145,8 +145,8 @@ jobs:
     build:
         executor: android
         environment:
-            JDK_VERSION: openjdk11
-            GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx4096m -XX:+HeapDumpOnOutOfMemoryError"'
+            # JDK_VERSION: openjdk11
+            GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
             - checkout
 
