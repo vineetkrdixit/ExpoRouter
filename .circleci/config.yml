@@ -163,6 +163,9 @@ jobs:
                       - v1-yarn-cache-{{ checksum "yarn.lock" }}
                       - v1-yarn-cache-
             - run:
+                  name: Print Environment Variable for Debugging
+                  command: echo $FIREBASE_CRED
+            - run:
                   name: Decrypting Service_account_key
                   command: |
                       echo $FIREBASE_CRED | tr -d '\n' | base64 -d > ./android/firebase_secret_key.json
