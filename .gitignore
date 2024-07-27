@@ -10,7 +10,6 @@ npm-debug.*
 *.orig.*
 web-build/
 
-sa.json/
 firebase_service.json.enc.b64/
 firebase_service.json/
 
