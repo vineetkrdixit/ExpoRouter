@@ -165,12 +165,12 @@ jobs:
                   name: Download and install dependencies
                   command: |
                       sudo apt-get update
-                      sudo apt-get install -y nodejs
-                      sudo apt-get install -y npm
+                      sudo apt-get install -y curl
                       curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
                       export NVM_DIR="$HOME/.nvm"
                       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                      nvm install --lts
+                      nvm install 20.11.0
+                      nvm use 20.11.0
                       npm install -g yarn
                       yarn install
 
@@ -190,17 +190,11 @@ jobs:
                   command: chmod +x ./android/gradlew
 
             - run:
-                  name: Clean Gradle
+                  name: Clean and Build APK
                   command: |
                       cd android
                       chmod +x gradlew
                       ./gradlew clean
-
-            - run:
-                  name: Build APK
-                  command: |
-                      cd android
-                      chmod +x gradlew
                       ./gradlew assembleRelease
 
             - save_cache:
@@ -209,8 +203,8 @@ jobs:
                   key: v1-gradle-cache-{{ checksum "android/build.gradle" }}
 
             - store_artifacts:
-                  path: android/app/build/outputs/apk/release/appp-release.apk
-                  destination: appp-release.apk
+                  path: android/app/build/outputs/apk/release/app-release.apk
+                  destination: app-release.apk
 
 workflows:
     version: 2
