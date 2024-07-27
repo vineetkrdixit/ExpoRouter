@@ -203,7 +203,7 @@ jobs:
                   working_directory: android
 
             - run:
-                  name: Install Fastlane
+                  name: Update Fastlane
                   command: bundle update fastlane
                   working_directory: android
 
