@@ -187,14 +187,14 @@ jobs:
                       - v1-gradle-cache-{{ checksum "android/build.gradle" }}
                       - v1-gradle-cache-
 
-            # - run:
-            #       name: Decrypting Service_account_key
-            #       command: |
-            #           echo $FIREBASE_SERVICE | base64 -d > firebase_service.json.b64
+            - run:
+                  name: Decrypting Service_account_key
+                  command: |
+                      echo "${{ secrets.FIREBASE_SECRET_KEY }}" > ./android/firebase_secret_key.json
 
             - run:
                   name: List main directory contents
-                  command: ls -la
+                  command: ls -la ./android
 
             - run:
                   name: Set permissions for Gradle
