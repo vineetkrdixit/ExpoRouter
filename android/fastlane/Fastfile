@@ -22,18 +22,12 @@ platform :android do
     #   task: "assemble",
     #   build_type: "Release"
     # )
-    File.open("fbt.json", "w") do |file|
-      file.write(Base64.decode64(ENV["GOOGLE_APPLICATION_CREDENTIALS_JSON"]))
-    end
-
-    ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "fbt.json"
-
-
     firebase_app_distribution(
       app: "1:940585881554:android:06a0d1c7163d3866af820b", # Replace with your Firebase App ID
       groups: "your_tester_group", # Replace with your tester group
       release_notes: "Automated release notes for this build.",
-      # firebase_cli_token: ENV["FIREBASE_TOKEN"]
+      firebase_cli_token: ENV["FIREBASE_TOKEN"]
+      service_credentials_file:ENV["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
     )
   end
 end

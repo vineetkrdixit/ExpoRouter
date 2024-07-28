@@ -146,7 +146,7 @@ jobs:
         environment:
             # JDK_VERSION: openjdk11
 
-            # LC_ALL: 'en_US.UTF-8'
+            LC_ALL: 'en_US.UTF-8'
             LANG: 'en_US.UTF-8'
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
@@ -179,6 +179,12 @@ jobs:
                   paths:
                       - ~/.cache/yarn
                   key: v1-yarn-cache-{{ checksum "yarn.lock" }}
+
+            # - run:
+            #       name: Ensure correct directory
+            #       command: |
+            #           echo "FIREBASE_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
+            #           echo "FIREBASE_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV
 
             # Cache Gradle dependencies
             - restore_cache:
@@ -224,6 +230,11 @@ jobs:
                   paths:
                       - ~/.gradle
                   key: v1-gradle-cache-{{ checksum "android/build.gradle" }}
+
+            - run:
+                  name: Add Firebase App Distribution Plugin
+                  command: bundle exec fastlane add_plugin firebase_app_distribution
+                  working_directory: android
 
             - run:
                   name: Deploy to Firebase
