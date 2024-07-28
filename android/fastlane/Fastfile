@@ -25,7 +25,7 @@ platform :android do
   end
   
   lane :increment_version do
-    gradle_file = File.read('app/build.gradle')
+    gradle_file = File.read('../app/build.gradle')
   
     version_name_match = gradle_file.match(/versionName "(\d+\.\d+\.\d+)"/)
     version_code_match = gradle_file.match(/versionCode (\d+)/)
@@ -43,7 +43,7 @@ platform :android do
       new_gradle_file = gradle_file.gsub(/versionCode \d+/, "versionCode #{new_version_code}")
                                    .gsub(/versionName "\d+\.\d+\.\d+"/, "versionName \"#{new_version_name}\"")
   
-      File.write('app/build.gradle', new_gradle_file)
+      File.write('../app/build.gradle', new_gradle_file)
   
       puts "Updated versionCode to #{new_version_code} and versionName to #{new_version_name}"
     else
