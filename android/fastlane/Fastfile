@@ -27,7 +27,7 @@ platform :android do
       groups: "your_tester_group", # Replace with your tester group
       release_notes: "Automated release notes for this build.",
       firebase_cli_token: ENV["FIREBASE_TOKEN"]
-      service_credentials_file:ENV["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+      # service_credentials_file:ENV["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
     )
   end
 end
