@@ -17,7 +17,7 @@ default_platform(:android)
 
 platform :android do
   desc "Distribute app to Firebase App Distribution"
-  lane :distribute_to_firebase do
+  lane :distribute do
     # gradle(
     #   task: "assemble",
     #   build_type: "Release"
