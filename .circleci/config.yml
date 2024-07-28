@@ -158,7 +158,7 @@ jobs:
                   command: pwd && ls -la
 
             # Cache Yarn dependencies
-            - restore_cache:
+            - run:
                   name: Download and install dependencies
                   command: |
                       sudo apt-get update
