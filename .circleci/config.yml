@@ -1,138 +1,3 @@
-# version: 2.1
-
-# orbs:
-#     node: circleci/node@5
-# #     windows: circleci/windows@5.0
-
-# jobs:
-#     build:
-#         docker:
-#             - image: reactnativecommunity/react-native-android:latest
-#         environment:
-#             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
-#         working_directory: ~/repo
-#         steps:
-#             - checkout
-#             - run:
-#                   name: Install dependencies
-#                   command: yarn install
-#             - run:
-#                   name: Update Dependencies
-#                   command: sudo apt-get update
-
-#             - run:
-#                   name: Chmod permissions
-#                   command: sudo chmod +x ./gradlew
-#                   working_directory: android
-
-#             - run:
-#                   name: Install Fastlane
-#                   command: bundle install
-#                   working_directory: android
-
-#             # Create cache checksum filess
-#             - run:
-#                   name: Create cache checksum files
-#                   command: |
-#                       mkdir -p ~/.tmp/checksumfiles
-#                       find . -type f -name 'build.gradle' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/build.gradle
-#                       find . -type f -name 'settings.gradle' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/settings.gradle
-
-#             - restore_cache:
-#                   keys:
-#                       - gradle-wrapper-{{ arch }}-{{ checksum "./android/gradle/wrapper/gradle-wrapper.properties" }}-{{ .Environment.CACHE_VERSION }}
-
-#             - restore_cache:
-#                   keys:
-#                       - gradle-home-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/build.gradle" }}-{{ checksum "~/.tmp/checksumfiles/settings.gradle" }}-{{ .Environment.CACHE_VERSION }}
-
-#             - restore_cache:
-#                   name: Restoring Gradle Build caches
-#                   keys:
-#                       - gradle-build-cache-{{ .Revision }}
-
-#             - run:
-#                   name: Dispersing Gradle Build caches for restoring
-#                   command: |
-#                       echo '#!/bin/bash
-#                       # Function to log messages
-#                       log() {
-#                       echo "$(date +'%Y-%m-%d %H:%M:%S') - $1"
-#                       }
-
-#                       # Check if gradle-build-caches directory exists
-#                       if [ -d ~/gradle-build-caches ]; then
-#                       log "Directory ~/gradle-build-caches exists."
-
-#                       # Check if gradle-build-caches directory is not empty
-#                       if [ -n "$(ls -A ~/gradle-build-caches)" ]; then
-#                       log "Directory ~/gradle-build-caches is not empty."
-
-#                       # Get the size of the gradle-build-caches directory
-#                       size_before=$(du -sh ~/gradle-build-caches | cut -f1)
-#                       log "Size of ~/gradle-build-caches before moving: $size_before"
-
-#                       # Remove existing build cache files
-#                       rm -rf ~/.gradle/caches/build-cache-*
-#                       log "Removed existing build cache files in ~/.gradle/caches/."
-
-#                       # Create the cache directory if it does not exist
-#                       mkdir -p ~/.gradle/caches/
-#                       log "Ensured ~/.gradle/caches/ directory exists."
-
-#                       # Move files from gradle-build-caches to ~/.gradle/caches/
-#                       mv ~/gradle-build-caches/* ~/.gradle/caches/
-#                       log "Moved files from ~/gradle-build-caches to ~/.gradle/caches/."
-
-#                       # Get the size of the new gradle caches directory
-#                       size_after=$(du -sh ~/.gradle/caches | cut -f1)
-#                       log "Size of ~/.gradle/caches after moving: $size_after"
-#                       else
-#                       log "Directory ~/gradle-build-caches is empty. No files to move."
-#                       fi
-#                       else
-#                       log "Directory ~/gradle-build-caches does not exist."
-#                       fi
-
-#                       # Always return true
-#                       true' > disperse_gradle_caches.sh
-
-#             - run:
-#                   name: Set Script Permissions
-#                   command: chmod +x disperse_gradle_caches.sh
-
-#             - run:
-#                   name: Execute Script
-#                   command: ./disperse_gradle_caches.sh
-
-#             # Save cache
-#             - save_cache:
-#                   name: Saving Gradle wrapper cache
-#                   paths:
-#                       - ~/.gradle/wrapper/
-#                   key: gradle-wrapper-{{ arch }}-{{ checksum "./android/gradle/wrapper/gradle-wrapper.properties" }}-{{ .Environment.CACHE_VERSION }}
-
-#             - save_cache:
-#                   name: Saving Gradle home cache
-#                   paths:
-#                       - ~/.gradle/caches/
-#                   key: gradle-home-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/build.gradle" }}-{{ checksum "~/.tmp/checksumfiles/settings.gradle" }}-{{ .Environment.CACHE_VERSION }}
-
-#             - run:
-#                   name: Build Android APK
-#                   command: |
-#                       ./gradlew --build-cache --max-workers 4 --no-daemon --continue assembleRelease --stacktrace
-#                   working_directory: android
-#                   no_output_timeout: 30m
-#             - run:
-#                   name: Deploy to Firebase
-#                   command: bundle exec fastlane distribute
-#                   working_directory: android
-# workflows:
-#     version: 2
-#     build_and_deploy:
-#         jobs:
-#             - build
 version: 2.1
 
 executors:
@@ -144,10 +9,8 @@ jobs:
     build:
         executor: android
         environment:
-            # JDK_VERSION: openjdk11
-
-            # LC_ALL: 'en_US.UTF-8'
-            # LANG: 'en_US.UTF-8'
+            LC_ALL: 'en_US.UTF-8'
+            LANG: 'en_US.UTF-8'
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
             - checkout
@@ -238,9 +101,9 @@ jobs:
                   command: bundle exec fastlane distribute
                   working_directory: android
 
-            - store_artifacts:
-                  path: android/app/build/outputs/apk/release/app-release.apk
-                  destination: app-release.apk
+            # - store_artifacts:
+            #       path: android/app/build/outputs/apk/release/app-release.apk
+            #       destination: app-release.apk
 
 workflows:
     version: 2
