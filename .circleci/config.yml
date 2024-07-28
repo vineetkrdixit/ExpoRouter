@@ -97,6 +97,11 @@ jobs:
                   working_directory: android
 
             - run:
+                  name: Deploy to build
+                  command: bundle exec fastlane build_application
+                  working_directory: android
+
+            - run:
                   name: Deploy to Firebase
                   command: bundle exec fastlane distribute
                   working_directory: android
