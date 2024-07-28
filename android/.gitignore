@@ -12,6 +12,7 @@ local.properties
 *.hprof
 .cxx/
 fbt.json
+fbt
 
 # Bundle artifacts
 *.jsbundle

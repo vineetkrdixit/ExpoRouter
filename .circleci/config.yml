@@ -180,26 +180,22 @@ jobs:
                       - ~/.cache/yarn
                   key: v1-yarn-cache-{{ checksum "yarn.lock" }}
 
-            # - run:
-            #       name: Ensure correct directory
-            #       command: |
-            #           echo "FIREBASE_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
-            #           echo "FIREBASE_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV
-
             # Cache Gradle dependencies
             - restore_cache:
                   keys:
                       - v1-gradle-cache-{{ checksum "android/build.gradle" }}
                       - v1-gradle-cache-
 
-            # - run:
-            #       name: Decrypting Service_account_key
-            #       command: |
-            #           echo $FIREBASE_CRED | base64 -d > firebase_secret_key.json
+            - run:
+                  name: Decrypting Service_account_key
+                  command: |
+                      echo "$SECRET_KEY" | base64 --decode > fbt.json
+                  working_directory: android
 
             - run:
                   name: List main directory contents
                   command: ls -la
+                  working_directory: android
 
             - run:
                   name: Set permissions for Gradle
@@ -215,16 +211,16 @@ jobs:
                   command: bundle update fastlane
                   working_directory: android
 
-            # - run:D
-            #       name: Clean and Build APK
-            #       command: |
-            #           cd android
-            #           export NVM_DIR="$HOME/.nvm"
-            #           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            #           nvm use 20.11.0
-            #           chmod +x gradlew
-            #           ./gradlew clean
-            #           ./gradlew assembleRelease
+            - run:
+                  name: Clean and Build APK
+                  command: |
+                      cd android
+                      export NVM_DIR="$HOME/.nvm"
+                      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                      nvm use 20.11.0
+                      chmod +x gradlew
+                      ./gradlew clean
+                      ./gradlew assembleRelease
 
             - save_cache:
                   paths:
