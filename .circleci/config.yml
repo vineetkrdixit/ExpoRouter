@@ -183,13 +183,18 @@ jobs:
                       - v1-gradle-cache-
 
             - run:
+                  name: List Android directory before secretKey contents
+                  command: ls -la
+                  working_directory: android
+
+            - run:
                   name: Decrypting Service_account_key
                   command: |
                       echo fbt | base64 --decode > fbt.json
                   working_directory: android
 
             - run:
-                  name: List main directory contents
+                  name: List Android directory after secretKey contents
                   command: ls -la
                   working_directory: android
 
