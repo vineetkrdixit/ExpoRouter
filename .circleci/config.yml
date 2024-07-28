@@ -60,7 +60,6 @@ jobs:
                   name: List Android directory after secretKey contents
                   command: ls -la
                   working_directory: android
-                  #   jh
 
             - run:
                   name: Set permissions for Gradle
