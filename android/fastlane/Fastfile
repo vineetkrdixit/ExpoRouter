@@ -13,6 +13,59 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+# default_platform(:android)
+
+# platform :android do
+#   lane :build_application do
+#     gradle(
+#       task: "assemble",
+#       build_type: "Release"
+#     )
+#   end
+  
+#   lane :increment_version do
+#     gradle_file = File.read('../app/build.gradle')
+  
+#     version_name_match = gradle_file.match(/versionName "(\d+\.\d+\.\d+)"/)
+#     version_code_match = gradle_file.match(/versionCode (\d+)/)
+  
+#     if version_name_match && version_code_match
+#       version_name = version_name_match[1]
+#       version_code = version_code_match[1].to_i
+  
+#       new_version_code = version_code + 1
+  
+#       version_parts = version_name.split('.').map(&:to_i)
+#       version_parts[2] += 1
+#       new_version_name = version_parts.join('.')
+  
+#       new_gradle_file = gradle_file.gsub(/versionCode \d+/, "versionCode #{new_version_code}")
+#                                    .gsub(/versionName "\d+\.\d+\.\d+"/, "versionName \"#{new_version_name}\"")
+  
+#       File.write('../app/build.gradle', new_gradle_file)
+  
+#       puts "Updated versionCode to #{new_version_code} and versionName to #{new_version_name}"
+#     else
+#       UI.user_error!("Could not find versionName or versionCode in build.gradle")
+#   end
+# end
+  
+#   desc "Distribute app to Firebase App Distribution"
+#   lane :distribute do
+#     build_application
+#     firebase_app_distribution(
+#       groups: "mytesters",
+#       release_notes: "Automated release notes for this build. testing with increment in version code",
+#       android_artifact_type:"APK",
+#       android_artifact_path: "./app/build/outputs/apk/release/app-release.apk",
+#       service_credentials_file: "fbt.json",
+#       app: "1:940585881554:android:06a0d1c7163d3866af820b",
+#       debug:true
+#     )
+#     increment_version
+#   end
+# end
+
 default_platform(:android)
 
 platform :android do
@@ -47,21 +100,21 @@ platform :android do
       puts "Updated versionCode to #{new_version_code} and versionName to #{new_version_name}"
     else
       UI.user_error!("Could not find versionName or versionCode in build.gradle")
+    end
   end
-end
-  
+
   desc "Distribute app to Firebase App Distribution"
   lane :distribute do
+    increment_version
     build_application
     firebase_app_distribution(
       groups: "mytesters",
       release_notes: "Automated release notes for this build. testing with increment in version code",
-      android_artifact_type:"APK",
+      android_artifact_type: "APK",
       android_artifact_path: "./app/build/outputs/apk/release/app-release.apk",
       service_credentials_file: "fbt.json",
       app: "1:940585881554:android:06a0d1c7163d3866af820b",
-      debug:true
+      debug: true
     )
-    increment_version
   end
 end
