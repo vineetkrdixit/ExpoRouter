@@ -12,6 +12,7 @@ web-build/
 
 firebase_service.json.enc.b64/
 firebase_service.json/
+fbt.json/
 
 # macOS
 .DS_Store
