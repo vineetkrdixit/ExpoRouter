@@ -146,8 +146,8 @@ jobs:
         environment:
             # JDK_VERSION: openjdk11
 
-            LC_ALL: 'en_US.UTF-8'
-            LANG: 'en_US.UTF-8'
+            # LC_ALL: 'en_US.UTF-8'
+            # LANG: 'en_US.UTF-8'
             GRADLE_OPTS: '-Xmx2014m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+HeapDumpOnOutOfMemoryError"'
         steps:
             - checkout
@@ -159,10 +159,6 @@ jobs:
 
             # Cache Yarn dependencies
             - restore_cache:
-                  keys:
-                      - v1-yarn-cache-{{ checksum "yarn.lock" }}
-                      - v1-yarn-cache-
-
                   name: Download and install dependencies
                   command: |
                       sudo apt-get update
@@ -189,7 +185,7 @@ jobs:
             - run:
                   name: Decrypting Service_account_key
                   command: |
-                      echo "$SECRET_KEY" | base64 --decode > fbt.json
+                      echo fbt | base64 --decode > fbt.json
                   working_directory: android
 
             - run:
