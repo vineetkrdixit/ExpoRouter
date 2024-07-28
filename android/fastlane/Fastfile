@@ -16,7 +16,6 @@
 default_platform(:android)
 
 platform :android do
-
   lane :build_application do
     gradle(
       task: "assemble",
@@ -49,6 +48,7 @@ platform :android do
     else
       UI.user_error!("Could not find versionName or versionCode in build.gradle")
   end
+end
   
   desc "Distribute app to Firebase App Distribution"
   lane :distribute do
