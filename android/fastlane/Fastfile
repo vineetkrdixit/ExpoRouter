@@ -18,16 +18,18 @@ default_platform(:android)
 platform :android do
   desc "Distribute app to Firebase App Distribution"
   lane :distribute do
-    # gradle(
-    #   task: "assemble",
-    #   build_type: "Release"
-    # )
+    gradle(
+      task: "assemble",
+      build_type: "Release"
+    )
     firebase_app_distribution(
-      app: "1:940585881554:android:06a0d1c7163d3866af820b", # Replace with your Firebase App ID
-      groups: "your_tester_group", # Replace with your tester group
+      groups: "mytesters",
       release_notes: "Automated release notes for this build.",
-      firebase_cli_token: ENV["FIREBASE_TOKEN"],
-      service_credentials_file:ENV["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+      android_artifact_type:"APK",
+      android_artifact_path: "./app/build/outputs/apk/release/app-release.apk",
+      service_credentials_file: "fbt.json",
+      app: "1:940585881554:android:06a0d1c7163d3866af820b",
+      debug:true
     )
   end
 end
