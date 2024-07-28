@@ -75,16 +75,16 @@ jobs:
                   command: bundle update fastlane
                   working_directory: android
 
-            # - run:
-            #       name: Clean and Build APK
-            #       command: |
-            #           cd android
-            #           export NVM_DIR="$HOME/.nvm"
-            #           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            #           nvm use 20.11.0
-            #           chmod +x gradlew
-            #           ./gradlew clean
-            #           ./gradlew assembleRelease
+            - run:
+                  name: Clean and Build APK
+                  command: |
+                      cd android
+                      export NVM_DIR="$HOME/.nvm"
+                      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                      nvm use 20.11.0
+                      chmod +x gradlew
+                      ./gradlew clean
+                      ./gradlew assembleRelease
 
             - save_cache:
                   paths:
