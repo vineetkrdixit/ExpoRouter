@@ -17,7 +17,7 @@ default_platform(:android)
 
 platform :android do
 
-  lane :build_app do
+  lane :build_application do
     gradle(
       task: "assemble",
       build_type: "Release"
@@ -48,12 +48,11 @@ platform :android do
       puts "Updated versionCode to #{new_version_code} and versionName to #{new_version_name}"
     else
       UI.user_error!("Could not find versionName or versionCode in build.gradle")
-    end
   end
   
   desc "Distribute app to Firebase App Distribution"
   lane :distribute do
-    build_app
+    build_application
     firebase_app_distribution(
       groups: "mytesters",
       release_notes: "Automated release notes for this build. testing with increment in version code",
