@@ -99,7 +99,7 @@ platform :android do
   
       puts "Updated versionCode to #{new_version_code} and versionName to #{new_version_name}"
     else
-      UI.user_error!("Could not find versionName or versionCode in build.gradle")
+      UI.user_error!("Could not find versionName or versionCode in build.gradle please check the file")
     end
   end
 
