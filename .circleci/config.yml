@@ -65,15 +65,15 @@ jobs:
                   name: Set permissions for Gradle
                   command: chmod +x ./android/gradlew
 
-            - run:
-                  name: Install Fastlane
-                  command: bundle install
-                  working_directory: android
+            # - run:
+            #       name: Install Fastlane
+            #       command: bundle install
+            #       working_directory: android
 
-            - run:
-                  name: Update Fastlane
-                  command: bundle update fastlane
-                  working_directory: android
+            # - run:
+            #       name: Update Fastlane
+            #       command: bundle update fastlane
+            #       working_directory: android
 
             - run:
                   name: Clean and Build APK
@@ -109,6 +109,15 @@ jobs:
         executor: android
         steps:
             - checkout
+            - run:
+                  name: Install Fastlane
+                  command: bundle install
+                  working_directory: android
+
+            - run:
+                  name: Update Fastlane
+                  command: bundle update fastlane
+                  working_directory: android
             - run:
                   name: Add Firebase App Distribution Plugin
                   command: bundle exec fastlane add_plugin firebase_app_distribution
