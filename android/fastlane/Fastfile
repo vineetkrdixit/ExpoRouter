@@ -109,7 +109,7 @@ platform :android do
     build_application
     firebase_app_distribution(
       groups: "mytesters",
-      release_notes: "Automated release notes for this build. testing with increment in version code",
+      release_notes: "Automated release notes for this build. testing with increment in version code and removed slack",
       android_artifact_type: "APK",
       android_artifact_path: "./app/build/outputs/apk/release/app-release.apk",
       service_credentials_file: "fbt.json",
