@@ -15,12 +15,10 @@ jobs:
         steps:
             - checkout
 
-            # Ensure the correct directory
             - run:
                   name: Ensure correct directory
                   command: pwd && ls -la
 
-            # Cache Yarn dependencies
             - run:
                   name: Download and install dependencies
                   command: |
@@ -39,7 +37,6 @@ jobs:
                       - ~/.cache/yarn
                   key: v1-yarn-cache-{{ checksum "yarn.lock" }}
 
-            # Cache Gradle dependencies
             - restore_cache:
                   keys:
                       - v1-gradle-cache-{{ checksum "android/build.gradle" }}
@@ -91,22 +88,11 @@ jobs:
                       - ~/.gradle
                   key: v1-gradle-cache-{{ checksum "android/build.gradle" }}
 
-            # - run:
-            #       name: Add Firebase App Distribution Plugin
-            #       command: bundle exec fastlane add_plugin firebase_app_distribution
-            #       working_directory: android
-
-            # - run:
-            #       name: Deploy to Firebase
-            #       command: bundle exec fastlane distribute
-            #       working_directory: android
-
             - store_artifacts:
                   path: android/app/build/outputs/apk/release/app-release.apk
                   destination: app-release.apk
 
-
-        distribute:
+    distribute:
         executor: android
         steps:
             - checkout
@@ -125,14 +111,9 @@ jobs:
         steps:
             - checkout
             - run:
-                  name: Add Firebase App Distribution Plugin
-                  command: bundle exec fastlane add_plugin firebase_app_distribution
-                  working_directory: android
-
-            - run:
-                  name: Deploy to Firebase
-                  command: bundle exec fastlane slack_notification
-                  working_directory: android
+                  name: Send Slack Notification
+                  command: |
+                      curl -X POST -H 'Content-type: application/json' --data '{"text":"Build and Deployment completed!"}' $SLACK_WEBHOOK_URL
 
 workflows:
     version: 2
@@ -140,8 +121,8 @@ workflows:
         jobs:
             - build
             - distribute:
-                requires:
-                    - build
+                  requires:
+                      - build
             - notify:
-                requires:
-                    - distribute
+                  requires:
+                      - distribute
