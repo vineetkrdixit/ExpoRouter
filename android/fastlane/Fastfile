@@ -71,7 +71,7 @@ end
 
     download_url = latest_release[:binaryDownloadUri]
     # Debugging message to check the download URL
-    UI.message("The download URL is: #{download_url}")
+    UI.message("The download URL is this: #{download_url}")
 
     # Send Slack notification after successful distribution
     slack(
