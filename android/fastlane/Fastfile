@@ -76,7 +76,7 @@ end
     # Send Slack notification after successful distribution
     slack(
       message: "New APK has been released and distributed via Firebase App Distribution! [Download it here](#{download_url})",
-      slack_url:"https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
+      slack_url:"https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
       success: true,
       payload: {
         "Release Type" => "Android APK",
