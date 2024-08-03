@@ -62,6 +62,17 @@
 #       app: "1:940585881554:android:06a0d1c7163d3866af820b",
 #       debug:true
 #     )
+#         # Send Slack notification after successful distribution
+#         slack(
+#           message: "New APK has been released and distributed via Firebase App Distribution!",
+#           slack_url: "https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
+#           success: true,
+#           payload: {
+#             "Release Type" => "Android APK",
+#             "Distribution Channel" => "Firebase App Distribution"
+#           },
+#           default_payloads: [:git_branch, :git_author]
+#         )
 #     increment_version
 #   end
 # end
@@ -75,38 +86,39 @@ platform :android do
       build_type: "Release"
     )
   end
-  
+
   lane :increment_version do
     gradle_file = File.read('../app/build.gradle')
-  
+
     version_name_match = gradle_file.match(/versionName "(\d+\.\d+\.\d+)"/)
     version_code_match = gradle_file.match(/versionCode (\d+)/)
-  
+
     if version_name_match && version_code_match
       version_name = version_name_match[1]
       version_code = version_code_match[1].to_i
-  
+
       new_version_code = version_code + 1
-  
+
       version_parts = version_name.split('.').map(&:to_i)
       version_parts[2] += 1
       new_version_name = version_parts.join('.')
-  
+
       new_gradle_file = gradle_file.gsub(/versionCode \d+/, "versionCode #{new_version_code}")
                                    .gsub(/versionName "\d+\.\d+\.\d+"/, "versionName \"#{new_version_name}\"")
-  
+
       File.write('../app/build.gradle', new_gradle_file)
-  
+
       puts "Updated versionCode to #{new_version_code} and versionName to #{new_version_name}"
     else
-      UI.user_error!("Could not find versionName or versionCode in build.gradle please check the file")
+      UI.user_error!("Could not find versionName or versionCode in build.gradle")
     end
   end
 
   desc "Distribute app to Firebase App Distribution"
   lane :distribute do
-    increment_version
     build_application
+
+    # Distribute to Firebase App Distribution
     firebase_app_distribution(
       groups: "mytesters",
       release_notes: "Automated release notes for this build. testing with increment in version code and removed slack",
@@ -114,7 +126,58 @@ platform :android do
       android_artifact_path: "./app/build/outputs/apk/release/app-release.apk",
       service_credentials_file: "fbt.json",
       app: "1:940585881554:android:06a0d1c7163d3866af820b",
-      debug: true
+      # debug: true
     )
+
+    # # Get the latest release details from Firebase App Distribution
+    # latest_release = firebase_app_distribution_get_latest_release(
+    #   app: "1:940585881554:android:06a0d1c7163d3866af820b",
+    #   service_credentials_file: "fbt.json"
+    # )
+
+    # download_url = latest_release[:binaryDownloadUri]
+    # # Debugging message to check the download URL
+    # UI.message("The download URL is: #{download_url}")
+
+    # # Send Slack notification after successful distribution
+    # slack(
+    #   message: "New APK has been released and distributed via Firebase App Distribution! [Download it here](#{download_url})",
+    #   slack_url: "https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
+    #   success: true,
+    #   payload: {
+    #     "Release Type" => "Android APK",
+    #     "Distribution Channel" => "Firebase App Distribution",
+    #     "Download URL" => download_url
+    #   },
+    #   default_payloads: [:git_branch, :git_author]
+    # )
+
+    increment_version
+  end
+  lane :slack_notification do
+    # Get the latest release details from Firebase App Distribution
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: "1:940585881554:android:06a0d1c7163d3866af820b",
+      service_credentials_file: "fbt.json"
+    )
+
+    download_url = latest_release[:binaryDownloadUri]
+    # Debugging message to check the download URL
+    UI.message("The download URL is: #{download_url}")
+
+    # Send Slack notification after successful distribution
+    slack(
+      message: "New APK has been released and distributed via Firebase App Distribution! [Download it here](#{download_url})",
+      slack_url: "https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
+      success: true,
+      payload: {
+        "Release Type" => "Android APK",
+        "Distribution Channel" => "Firebase App Distribution",
+        "Download URL" => download_url
+      },
+      default_payloads: [:git_branch, :git_author]
+    )
+
+    increment_version
   end
 end

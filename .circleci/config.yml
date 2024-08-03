@@ -65,15 +65,15 @@ jobs:
                   name: Set permissions for Gradle
                   command: chmod +x ./android/gradlew
 
-            - run:
-                  name: Install Fastlane
-                  command: bundle install
-                  working_directory: android
+            # - run:
+            #       name: Install Fastlane
+            #       command: bundle install
+            #       working_directory: android
 
-            - run:
-                  name: Update Fastlane
-                  command: bundle update fastlane
-                  working_directory: android
+            # - run:
+            #       name: Update Fastlane
+            #       command: bundle update fastlane
+            #       working_directory: android
 
             - run:
                   name: Clean and Build APK
@@ -91,6 +91,33 @@ jobs:
                       - ~/.gradle
                   key: v1-gradle-cache-{{ checksum "android/build.gradle" }}
 
+            # - run:
+            #     name: Add Firebase App Distribution Plugin
+            #     command: bundle exec fastlane add_plugin firebase_app_distribution
+            #     working_directory: android
+
+            # - run:
+            #     name: Deploy to Firebase
+            #     command: bundle exec fastlane distribute
+            #     working_directory: android
+
+            - store_artifacts:
+                  path: android/app/build/outputs/apk/release/app-release.apk
+                  destination: app-release.apk
+
+    distribute:
+        executor: android
+        steps:
+            - checkout
+            - run:
+                  name: Install Fastlane
+                  command: bundle install
+                  working_directory: android
+
+            - run:
+                  name: Update Fastlane
+                  command: bundle update fastlane
+                  working_directory: android
             - run:
                   name: Add Firebase App Distribution Plugin
                   command: bundle exec fastlane add_plugin firebase_app_distribution
@@ -101,12 +128,28 @@ jobs:
                   command: bundle exec fastlane distribute
                   working_directory: android
 
-            # - store_artifacts:
-            #       path: android/app/build/outputs/apk/release/app-release.apk
-            #       destination: app-release.apk
+    notify:
+        executor: android
+        steps:
+            - checkout
+            - run:
+                  name: Add Firebase App Distribution Plugin
+                  command: bundle exec fastlane add_plugin firebase_app_distribution
+                  working_directory: android
+
+            - run:
+                  name: Deploy to Firebase
+                  command: bundle exec fastlane slack_notification
+                  working_directory: android
 
 workflows:
     version: 2
-    build:
+    build_and_deploy:
         jobs:
             - build
+            - distribute:
+                  requires:
+                      - build
+            - notify:
+                  requires:
+                      - distribute
