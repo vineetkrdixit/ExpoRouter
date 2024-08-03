@@ -62,18 +62,9 @@ end
       app: "1:940585881554:android:06a0d1c7163d3866af820b",
       debug:true
     )
-        # Send Slack notification after successful distribution
-        slack(
-          message: "New APK has been released and distributed via Firebase App Distribution!",
-          slack_url: "https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
-          success: true,
-          payload: {
-            "Release Type" => "Android APK",
-            "Distribution Channel" => "Firebase App Distribution"
-          },
-          default_payloads: [:git_branch, :git_author]
-        )
-        latest_release = firebase_app_distribution_get_latest_release(
+
+        # Get the latest release details from Firebase App Distribution
+    latest_release = firebase_app_distribution_get_latest_release(
       app: "1:940585881554:android:06a0d1c7163d3866af820b",
       service_credentials_file: "fbt.json"
     )
@@ -85,7 +76,7 @@ end
     # Send Slack notification after successful distribution
     slack(
       message: "New APK has been released and distributed via Firebase App Distribution! [Download it here](#{download_url})",
-      slack_url: "https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
+      slack_url: "https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
       success: true,
       payload: {
         "Release Type" => "Android APK",
