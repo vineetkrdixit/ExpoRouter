@@ -74,17 +74,16 @@ end
     UI.message("The download URL is: #{download_url}")
 
     # Send Slack notification after successful distribution
-    slack(
-      message: "New APK has been released and distributed via Firebase App Distribution! [Download it here](#{download_url})",
-      slack_url:"https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
-      success: true,
-      payload: {
-        "Release Type" => "Android APK",
-        "Distribution Channel" => "Firebase App Distribution",
-        "Download URL" => download_url
-      },
-      default_payloads: [:git_branch, :git_author]
-    )
+    # slack(
+    #   message: "New APK has been released and distributed via Firebase App Distribution! [Download it here](#{download_url})",
+    #   slack_url:"https://hooks.slack.com/services/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", # Replace with your Slack webhook URL
+    #   payload: {
+    #     "Release Type" => "Android APK",
+    #     "Distribution Channel" => "Firebase App Distribution",
+    #     "Download URL" => download_url
+    #   },
+    #   default_payloads: [:git_branch, :git_author]
+    # )
     increment_version
   end
 end
