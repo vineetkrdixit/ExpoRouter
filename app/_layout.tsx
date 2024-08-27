@@ -55,6 +55,9 @@ export default function RootLayout() {
         });
     }, [loaded]);
 
+    /**
+     * @description this is use effect to call the fuction in loop
+     */
     useEffect(() => {
         if (loaded) {
             SplashScreen.hideAsync();
